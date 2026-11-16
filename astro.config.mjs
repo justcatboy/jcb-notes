@@ -13,6 +13,9 @@ const standard = (name) => ({
 });
 
 export default defineConfig({
+  // GitHub Pages: https://justcatboy.github.io/jcb-notes/
+  site: 'https://justcatboy.github.io',
+  base: '/jcb-notes',
   integrations: [
     starlight({
       title: 'JCB-NOTES',
