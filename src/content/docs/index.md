@@ -32,6 +32,24 @@ template: splash
 Проект, который следует стандартам, перечисляет их с версиями в своём `CLAUDE.md` (или README):
 `jcb-git-workflow v1.0`, `jcb-dotenv v1.0`.
 
+## Для Claude
+
+Чтобы Claude в проекте знал стандарты, добавь в `CLAUDE.md` проекта одну строку — принятые стандарты с версиями и
+оглавление:
+
+```md
+Стандарты: jcb-git-workflow v1.0, jcb-dotenv v1.0 — https://justcatboy.github.io/jcb-notes/llms.txt
+```
+
+| Файл | Что |
+|---|---|
+| [llms.txt](llms.txt) | оглавление: как пользоваться и ссылки на `.md` всех документов |
+| [standards.json](standards.json) | стандарты с текущими версиями и ссылками на все версии |
+| [llms-full.txt](llms-full.txt) | весь сайт одним файлом |
+
+Текст принятой версии не меняется: `standards/<имя>/<версия>.md`, например
+[standards/dotenv/v1.0.md](standards/dotenv/v1.0.md). Версия в шапке стандарта ведёт туда же.
+
 ## Гайды
 
 Как подключить внешнюю службу: по шагам.
@@ -55,3 +73,4 @@ template: splash
 | Документ | О чём |
 |---|---|
 | [Мой стек](notes/stack/) | на чём я пишу сейчас; многие стандарты выросли из него — Nuxt, PostgreSQL, Playwright |
+| [Eleventy и Astro](notes/eleventy-vs-astro/) | почему этот сайт на Astro: кто стоит за каждым, как часто меняются, перспективы |
