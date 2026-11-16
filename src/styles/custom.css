@@ -4,10 +4,23 @@ starlight-theme-select label {
   --sl-select-width: 7.5em !important;
 }
 
-/* Поиск: Starlight начинает поле от левого края текста и обрывает на 22rem — выглядит смещённым.
-   Растягиваем на ширину колонки текста, чтобы края совпадали с текстом. */
+/* Поиск — только значок, на всех ширинах: место в шапке занимают вкладки разделов.
+   Открывается по клику и по Ctrl+K, как раньше. */
 @media (min-width: 50rem) {
   button[data-open-modal] {
-    max-width: calc(var(--sl-content-width) - 1rem); /* ровно по правому краю текста */
+    width: auto;
+    max-width: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-xl);
+  }
+  button[data-open-modal]:hover {
+    color: var(--sl-color-white);
+  }
+  button[data-open-modal] > span,
+  button[data-open-modal] > kbd {
+    display: none !important;
   }
 }
