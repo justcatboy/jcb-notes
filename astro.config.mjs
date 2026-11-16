@@ -26,6 +26,7 @@ export default defineConfig({
       social: [{ icon: 'github', label: 'Исходники на GitHub', href: 'https://github.com/justcatboy/jcb-notes' }],
       customCss: ['./src/styles/custom.css'],
       components: {
+        Footer: './src/components/Footer.astro',
         Header: './src/components/Header.astro',
         PageTitle: './src/components/PageTitle.astro',
         Sidebar: './src/components/Sidebar.astro',

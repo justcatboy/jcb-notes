@@ -1,0 +1,40 @@
+---
+// Подвал Starlight (назад / далее) и под ним — версия сайта, исходники и лицензия.
+import Default from '@astrojs/starlight/components/Footer.astro';
+import { siteTag, siteVersion } from '../version';
+
+const repo = 'https://github.com/justcatboy/jcb-notes';
+const versionHref = siteTag && `${repo}/tree/${siteTag}`;
+---
+
+<Default />
+<p class="site-info">
+  <span>JCB-NOTES</span>
+  <span class="sep" aria-hidden="true">·</span>
+  {versionHref ? <a href={versionHref} title="Версия сайта — тег в репозитории">{siteVersion}</a> : <span>{siteVersion}</span>}
+  <span class="sep" aria-hidden="true">·</span>
+  <a href={repo}>Исходники на GitHub</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href={`${repo}/blob/main/LICENSE`}>CC BY 4.0</a>
+</p>
+
+<style>
+  .site-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.875rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-hairline);
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+    text-align: center;
+  }
+  .site-info a {
+    color: inherit;
+  }
+  .site-info a:hover {
+    color: var(--sl-color-white);
+  }
+</style>
