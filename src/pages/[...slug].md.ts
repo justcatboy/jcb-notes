@@ -1,8 +1,8 @@
 // Каждый документ — ещё и файлом .md рядом со страницей: /standards/dotenv/ → /standards/dotenv.md.
-// В начале файла — заголовок `# …` и шапка из полей, чтобы файл читался сам по себе.
+// Это всегда текущий текст; неизменяемый по версии — /standards/dotenv/v1.0.md (standards/[name]/[version].md.ts).
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { headerLine } from '../header';
+import { toMarkdown } from '../markdown';
 
 export const getStaticPaths = (async () => {
   const docs = await getCollection('docs');
@@ -11,7 +11,7 @@ export const getStaticPaths = (async () => {
 
 export const GET: APIRoute = ({ props }) => {
   const { entry } = props as { entry: CollectionEntry<'docs'> };
-  const header = headerLine(entry.data);
-  const text = [`# ${entry.data.title}`, header, (entry.body ?? '').trim()].filter(Boolean).join('\n\n') + '\n';
-  return new Response(text, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
+  return new Response(toMarkdown(entry.data, entry.body ?? ''), {
+    headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
+  });
 };
