@@ -25,6 +25,9 @@ export default defineConfig({
       },
       social: [{ icon: 'github', label: 'Исходники на GitHub', href: 'https://github.com/justcatboy/jcb-notes' }],
       customCss: ['./src/styles/custom.css'],
+      // Для Claude: оглавление сайта и .md каждой страницы (src/routeData.ts).
+      head: [{ tag: 'link', attrs: { rel: 'alternate', type: 'text/plain', title: 'llms.txt', href: '/jcb-notes/llms.txt' } }],
+      routeMiddleware: './src/routeData.ts',
       components: {
         Footer: './src/components/Footer.astro',
         Header: './src/components/Header.astro',

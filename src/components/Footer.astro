@@ -1,6 +1,7 @@
 ---
 // Подвал Starlight (назад / далее) и под ним — версия сайта, исходники и лицензия.
 import Default from '@astrojs/starlight/components/Footer.astro';
+import { page } from '../markdown';
 import { siteTag, siteVersion } from '../version';
 
 const repo = 'https://github.com/justcatboy/jcb-notes';
@@ -16,6 +17,8 @@ const versionHref = siteTag && `${repo}/tree/${siteTag}`;
   <a href={repo}>Исходники на GitHub</a>
   <span class="sep" aria-hidden="true">·</span>
   <a href={`${repo}/blob/main/LICENSE`}>CC BY 4.0</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href={page('llms.txt')} title="Оглавление для Claude и других LLM">llms.txt</a>
 </p>
 
 <style>
