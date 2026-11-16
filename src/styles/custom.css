@@ -1,0 +1,13 @@
+/* Переключатель темы: Starlight задаёт ширину 6.25em под английские подписи (inline style),
+   «Светлая» и «Тёмная» в неё не влезают. */
+starlight-theme-select label {
+  --sl-select-width: 7.5em !important;
+}
+
+/* Поиск: Starlight начинает поле от левого края текста и обрывает на 22rem — выглядит смещённым.
+   Растягиваем на ширину колонки текста, чтобы края совпадали с текстом. */
+@media (min-width: 50rem) {
+  button[data-open-modal] {
+    max-width: calc(var(--sl-content-width) - 1rem); /* ровно по правому краю текста */
+  }
+}
