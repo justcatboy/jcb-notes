@@ -22,6 +22,7 @@ export default defineConfig({
       locales: {
         root: { label: 'Русский', lang: 'ru' },
       },
+      social: [{ icon: 'github', label: 'Исходники на GitHub', href: 'https://github.com/justcatboy/jcb-notes' }],
       customCss: ['./src/styles/custom.css'],
       components: {
         PageTitle: './src/components/PageTitle.astro',
