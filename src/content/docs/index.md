@@ -73,3 +73,4 @@ template: splash
 | Документ | О чём |
 |---|---|
 | [Мой стек](notes/stack/) | на чём я пишу сейчас; многие стандарты выросли из него — Nuxt, PostgreSQL, Playwright |
+| [Eleventy и Astro](notes/eleventy-vs-astro/) | почему этот сайт на Astro: кто стоит за каждым, как часто меняются, перспективы |
