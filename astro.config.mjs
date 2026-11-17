@@ -49,7 +49,6 @@ export default defineConfig({
           [
             { label: 'Стандарты', link: '/standards/git-workflow/', items: standards },
             { label: 'Гайды', link: '/guides/brevo/', items: [{ autogenerate: { directory: 'guides' } }] },
-            { label: 'Claude', link: '/claude/decisions/', items: [{ autogenerate: { directory: 'claude' } }] },
             { label: 'Notes', link: '/notes/stack/', items: [{ autogenerate: { directory: 'notes' } }] },
           ],
           // Главная — вне разделов: обзорная страница без меню слева.
