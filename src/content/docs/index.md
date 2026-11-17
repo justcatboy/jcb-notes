@@ -20,6 +20,8 @@ template: splash
 | Код | Документ | Версия | О чём |
 |---|---|---|---|
 | jcb-git-workflow | [Ветки и версии](standards/git-workflow/) | v1.0 | `dev` / `main`, слияния `--no-ff`, версии `v<год>.<номер>` |
+| jcb-git-public-ready | [Репозиторий готов к публикации](standards/git-public-ready/) | v0.1 | личное — в `private/` и `*.local*`, стоп-лист и сканер секретов перед коммитом |
+| jcb-git-private-backup | [Бэкап личного](standards/git-private-backup/) | v0.1 | `private/` — свой репозиторий, зашифрованный целиком, копия вне машины, проверка восстановления |
 | jcb-dotenv | [Настройки только в .env-файлах](standards/dotenv/) | v1.0 | один набор переменных во всех файлах, переключатели явно |
 | jcb-devports | [Порты](standards/devports/) | v1.0 | блок из 10 портов на проект, реестр вне репозиториев |
 | jcb-external-services | [Внешние службы](standards/external-services/) | v1.0 | без службы — без функции, модуль на службу, решение на сбой |

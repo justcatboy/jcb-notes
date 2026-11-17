@@ -4,6 +4,13 @@ starlight-theme-select label {
   --sl-select-width: 7.5em !important;
 }
 
+/* Меню стандартов: черта после последнего стандарта группы (astro.config.mjs, standardGroups). */
+ul.top-level > li:has(a.group-end) {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--sl-color-hairline-light);
+}
+
 /* Поиск — только значок, на всех ширинах: место в шапке занимают вкладки разделов.
    Открывается по клику и по Ctrl+K, как раньше. */
 @media (min-width: 50rem) {
