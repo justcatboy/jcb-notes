@@ -92,8 +92,9 @@ body {
 .cal-post:hover::after, .cal-post:focus::after { opacity: 1; }
 .cal-post:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-/* шуточный рекламный блок */
-.ad {
+/* Шуточный рекламный блок (.ad*) и запасной (.blocked-box) — на случай, если блокировщик рекламы спрятал первый. */
+[hidden] { display: none !important; }
+.ad, .blocked-box {
   position: relative;
   border: 1px dashed var(--muted);
   padding: 22px 14px 18px;
@@ -106,6 +107,9 @@ body {
   background: var(--bg); font-size: 0.85em;
 }
 .ad-note { display: block; margin-top: 8px; font-size: 0.85em; }
+.blocked-box { padding: 16px 14px 14px; }
+.blocked-box-icon { display: block; margin: 0 auto 8px; fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.blocked-box-sub { display: block; font-size: 0.85em; }
 
 /* главная */
 .lead { margin-bottom: 40px; }

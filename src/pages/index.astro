@@ -56,14 +56,44 @@ const standards = (await getStandards()).flat();
     <aside class="side">
       <Calendar />
       {
+        // Шуточная «реклама» — с классами ad*, их прячут блокировщики. Рядом — запасной блок с нейтральными
+        // классами: его показывает скрипт ниже, если блокировщик спрятал рекламу.
         [1, 2].map(() => (
-          <div class="ad" role="note">
-            <span class="ad-label">реклама</span>
-            <p>Здесь могла быть ваша реклама</p>
-            <span class="ad-note">закажите прямо сейчас!</span>
+          <div class="joke-slot">
+            <div class="ad" role="note">
+              <span class="ad-label">реклама</span>
+              <p>Здесь могла быть ваша реклама</p>
+              <span class="ad-note">закажите прямо сейчас!</span>
+            </div>
+            <div class="blocked-box" role="note" hidden>
+              <svg class="blocked-box-icon" viewBox="0 0 48 56" width="56" height="66" aria-hidden="true">
+                <path d="M24 3 L44 10 V27 C44 40 35 49 24 53 C13 49 4 40 4 27 V10 Z" />
+                <path d="M14 37 L19 20 L24 37 M16 31 H22" />
+                <path d="M28 20 V37 H31 C36 37 38 33 38 28.5 C38 24 36 20 31 20 Z" />
+                <path d="M9 44 L40 13" />
+              </svg>
+              <span class="blocked-box-sub">рекламу съел блокировщик</span>
+            </div>
           </div>
         ))
       }
     </aside>
   </div>
 </Base>
+
+<script>
+  // Блокировщик рекламы прячет .ad / .ad-label / .ad-note (иногда не сразу) — тогда вместо них запасной блок.
+  const hidden = (el: Element | null) =>
+    !el || !(el as HTMLElement).offsetHeight || getComputedStyle(el).display === 'none' || getComputedStyle(el).visibility === 'hidden';
+  const check = () => {
+    for (const slot of document.querySelectorAll('.joke-slot')) {
+      const ad = slot.querySelector('.ad');
+      if (hidden(ad) || hidden(slot.querySelector('.ad-label')) || hidden(slot.querySelector('.ad-note'))) {
+        ad?.setAttribute('hidden', '');
+        slot.querySelector<HTMLElement>('.blocked-box')!.hidden = false;
+      }
+    }
+  };
+  setTimeout(check, 300);
+  setTimeout(check, 1500);
+</script>
