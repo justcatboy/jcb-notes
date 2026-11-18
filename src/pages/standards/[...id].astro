@@ -1,13 +1,15 @@
 ---
-// Стандарт (/standards/dotenv/) и его приложение (/standards/dotenv/appendix-1/).
+// Стандарт (/standards/dotenv/) и его приложения (/standards/dotenv/appendix-1/, appendix-2/, …).
 // У стандарта версия в шапке — ссылка на неизменяемый текст этой версии: её и копирует проект, принимая стандарт.
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import StandardParts from '../../components/StandardParts.astro';
 import Toc from '../../components/Toc.astro';
 import { day } from '../../header';
 import Base from '../../layouts/Base.astro';
 import { page } from '../../markdown';
-import { downloadName } from '../../site';
+import { appendixNumber, downloadName, getAppendices } from '../../site';
+import { tocItems } from '../../toc';
 
 export const getStaticPaths = (async () => {
   const all = await getCollection('standards');
@@ -19,40 +21,63 @@ export const getStaticPaths = (async () => {
 
 const { entry, standard } = Astro.props as { entry: CollectionEntry<'standards'>; standard: CollectionEntry<'standards'> };
 const { Content, headings } = await render(entry);
-const isAppendix = entry.id !== standard.id;
 const { code, version, date } = entry.data;
 const name = standard.id;
-const appendixId = `${name}/appendix-1`;
-const hasAppendix = !isAppendix && (await getCollection('standards')).some((e) => e.id === appendixId);
+const number = appendixNumber(entry.id);
+const isAppendix = number !== undefined;
+const label = (id: string) => (appendixNumber(id) ? `Приложение ${appendixNumber(id)}` : 'Стандарт');
+// Стандарт и его приложения по порядку — для меню справа и «назад / далее» внизу.
+const parts = [standard, ...(await getAppendices(name))];
+const index = parts.findIndex((p) => p.id === entry.id);
+const prev = parts[index - 1];
+const next = parts[index + 1];
 const md = `standards/${entry.id}.md`;
+const hasToc = tocItems(headings).length > 0;
+const hasParts = parts.length > 1;
+const partLinks = parts.map((p) => ({ label: label(p.id), href: page(`standards/${p.id}/`), current: p.id === entry.id }));
 ---
 
-<Base title={isAppendix ? `${standard.data.code}: приложение 1` : entry.data.title} section="standards" md={md}>
-  <article>
-    <div class="crumbs">
-      <a href={page('standards/')}>стандарты</a> /{' '}
-      {isAppendix ? <><a href={page(`standards/${name}/`)}>{standard.data.code}</a> / приложение 1</> : code}
-    </div>
-    <h1>{isAppendix ? 'Приложение 1' : entry.data.title}</h1>
-    <div class="meta">
-      {
-        code && version ? (
-          <span>
-            Стандарт {code} -{' '}
-            <a href={page(`standards/${name}/${version}.md`)} title="Неизменяемый текст этой версии — для ссылки из проекта">{version}</a>
-            {date && ` - ${day(date)}`}
-          </span>
-        ) : (
-          <span>к стандарту <a href={page(`standards/${name}/`)}>{standard.data.title}</a></span>
+<Base title={isAppendix ? `${standard.data.code}: приложение ${number}` : entry.data.title} section="standards" md={md}>
+  <article class="doc">
+    <header class="doc-head">
+      <div class="crumbs">
+        <a href={page('standards/')}>стандарты</a> /{' '}
+        {isAppendix ? <><a href={page(`standards/${name}/`)}>{standard.data.code}</a> / приложение {number}</> : code}
+      </div>
+      <h1>{isAppendix ? `Приложение ${number}` : entry.data.title}</h1>
+      <div class="meta">
+        {
+          code && version ? (
+            <span>
+              Стандарт {code} -{' '}
+              <a href={page(`standards/${name}/${version}.md`)} title="Неизменяемый текст этой версии — для ссылки из проекта">{version}</a>
+              {date && ` - ${day(date)}`}
+            </span>
+          ) : (
+            <span>к стандарту <a href={page(`standards/${name}/`)}>{standard.data.title}</a></span>
+          )
+        }
+        <a class="dl" href={page(md)} download={downloadName('standards', entry.id)}>Скачать .md</a>
+      </div>
+    </header>
+    {
+      // Стандарт и приложения — над оглавлением; без оглавления — тем же блоком отдельно.
+      hasToc ? (
+        <Toc headings={headings}>
+          {hasParts && <StandardParts slot="parts" code={standard.data.code!} parts={partLinks} />}
+        </Toc>
+      ) : (
+        hasParts && (
+          <div class="toc">
+            <StandardParts code={standard.data.code!} parts={partLinks} />
+          </div>
         )
-      }
-      <a class="dl" href={page(md)} download={downloadName('standards', entry.id)}>Скачать .md</a>
-    </div>
-    <Toc headings={headings} />
-    <div class="prose"><Content /></div>
-    <nav class="pager" aria-label="Стандарт и приложение">
-      {isAppendix && <a href={page(`standards/${name}/`)}>← {standard.data.code}</a>}
-      {hasAppendix && <a href={page(`standards/${appendixId}/`)} style="margin-left:auto">Приложение 1: как я выполняю стандарт →</a>}
+      )
+    }
+    <div class="prose doc-body"><Content /></div>
+    <nav class="pager doc-foot" aria-label="Стандарт и приложения">
+      {prev && <a href={page(`standards/${prev.id}/`)}>← {appendixNumber(prev.id) ? label(prev.id) : standard.data.code}</a>}
+      {next && <a href={page(`standards/${next.id}/`)} style="margin-left:auto">{label(next.id)}: дополнение к стандарту →</a>}
     </nav>
   </article>
 </Base>

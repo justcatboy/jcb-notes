@@ -164,6 +164,11 @@ th { color: var(--muted); font-weight: 700; }
 .meta .dl:hover { border-color: var(--accent); color: var(--accent); }
 /* Оглавление на узком экране: над текстом строка «стандарт · приложения» и свёрнутый блок «Содержание». */
 .toc { font-size: 0.86em; margin: 0 0 28px; padding: 10px 0; border-block: 1px solid var(--line); }
+.toc-parts { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+.toc-parts b { color: var(--muted); }
+.toc-parts ul { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 !important; }
+.toc-parts [aria-current] { color: var(--fg); font-weight: 700; }
+.toc-parts:not(:last-child) { padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px dashed var(--line); }
 .toc summary { color: var(--muted); font-weight: 700; cursor: pointer; list-style: none; }
 .toc summary::-webkit-details-marker { display: none; }
 .toc summary::before { content: '▸ '; }
@@ -208,7 +213,11 @@ th { color: var(--muted); font-weight: 700; }
   .doc > .toc li { margin: 0.45em 0; }
   .doc > .toc a { color: var(--muted); display: block; }
   .doc > .toc a:hover { color: var(--fg); }
-  .doc > .toc a[aria-current] { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }}
+  .doc > .toc a[aria-current] { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .doc > .toc .toc-parts { display: block; }
+  .doc > .toc .toc-parts ul { display: block; }
+  .doc > .toc .toc-parts:not(:last-child) { padding-bottom: 14px; margin-bottom: 14px; }
+}
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 .pager { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 36px; font-size: 0.9em; }
 
@@ -233,6 +242,7 @@ th { color: var(--muted); font-weight: 700; }
 /* список стандартов */
 .std-table td.code, .std-table td.v { white-space: nowrap; }
 .std-table td.v { font-variant-numeric: tabular-nums; }
+.std-table td.apps a + a { margin-left: 10px; }
 .std-table tr.group-start td { border-top: 1px dashed var(--muted); }
 .draft { color: var(--muted); }
 

@@ -1,59 +1,74 @@
 ---
-// Список стандартов по группам, как ими пользоваться и файлы для Claude.
+// Список стандартов по группам и как ими пользоваться; справа — что добавить в CLAUDE.md и файлы для Claude.
+import SideBlock from '../../components/SideBlock.astro';
 import Base from '../../layouts/Base.astro';
 import { absolute, page } from '../../markdown';
-import { getStandards } from '../../site';
+import { appendixNumber, getAppendices, getStandards } from '../../site';
 
 const groups = await getStandards();
+const appendices = new Map(
+  await Promise.all(groups.flat().map(async (entry) => [entry.id, await getAppendices(entry.id)] as const)),
+);
 ---
 
 <Base title="Стандарты" description="Стандарты jcb-*: правила для проектов, на которые можно сослаться с версией." section="standards">
-  <h1>Стандарты</h1>
-  <div class="prose">
-    <p>
-      Правила, по которым проект можно проверить: соответствует или нет. Проект перечисляет принятые стандарты с
-      версиями в своём <code>CLAUDE.md</code> или README: <code>jcb-git-workflow v1.0</code>, <code>jcb-dotenv v1.0</code>.{' '}
-      У каждого стандарта есть «Приложение 1» — как я выполняю его на своих примерах; оно ничего не требует.
-    </p>
+  <div class="split">
+    <div class="split-main">
+      <h1>Стандарты</h1>
+      <div class="prose">
+        <p>
+          Правила, по которым проект можно проверить: соответствует или нет. Проект перечисляет принятые стандарты с
+          версиями в своём <code>CLAUDE.md</code> или README: <code>jcb-git-workflow v1.0</code>, <code>jcb-dotenv v1.0</code>.{' '}
+          К стандарту может быть приложение — дополнение со связанными материалами: примерами, пояснениями,
+          инструментами. Оно может пригодиться, а может оказаться лишним: соответствие проверяется только по стандарту.
+        </p>
 
-    <table class="std-table">
-      <thead><tr><th>Код</th><th>Документ</th><th>Версия</th></tr></thead>
-      <tbody>
-        {
-          groups.map((group, g) =>
-            group.map((entry, i) => (
-              <tr class={g > 0 && i === 0 ? 'group-start' : undefined}>
-                <td class="code">{entry.data.code}</td>
-                <td><a href={page(`standards/${entry.id}/`)}>{entry.data.title}</a></td>
-                <td class:list={['v', { draft: entry.data.version.startsWith('v0.') }]}>{entry.data.version}</td>
-              </tr>
-            )),
-          )
-        }
-      </tbody>
-    </table>
+        <table class="std-table">
+          <thead><tr><th>Код</th><th>Документ</th><th>Версия</th><th>Приложение</th></tr></thead>
+          <tbody>
+            {
+              groups.map((group, g) =>
+                group.map((entry, i) => (
+                  <tr class={g > 0 && i === 0 ? 'group-start' : undefined}>
+                    <td class="code">{entry.data.code}</td>
+                    <td><a href={page(`standards/${entry.id}/`)}>{entry.data.title}</a></td>
+                    <td class:list={['v', { draft: entry.data.version.startsWith('v0.') }]}>{entry.data.version}</td>
+                    <td class="apps">
+                      {appendices.get(entry.id)!.map((a) => (
+                        <a href={page(`standards/${a.id}/`)} title={`${entry.data.code}: приложение ${appendixNumber(a.id)}`}>{appendixNumber(a.id)}</a>
+                      ))}
+                    </td>
+                  </tr>
+                )),
+              )
+            }
+          </tbody>
+        </table>
 
-    <h2>Версии</h2>
-    <p>
-      <code>v&lt;старший&gt;.&lt;младший&gt;</code>. Правило поменялось по сути и проект может перестать соответствовать —
-      старший номер (<code>v2.0</code>). Добавилось или уточнилось с сохранением соответствия — младший (<code>v1.1</code>).{' '}
-      <code>v0.x</code> — черновик: меняется свободно, без новой старшей версии.
-    </p>
-    <p>
-      Текст принятой версии неизменен: <code>standards/&lt;имя&gt;/&lt;версия&gt;.md</code>, например{' '}
-      <a href={page('standards/dotenv/v1.0.md')}>standards/dotenv/v1.0.md</a>. Версия в шапке стандарта ведёт туда же.
-    </p>
-
-    <h2>Для Claude</h2>
-    <p>Чтобы Claude в проекте знал стандарты, добавь в <code>CLAUDE.md</code> проекта одну строку — принятые стандарты с версиями и оглавление:</p>
-    <pre><code>Стандарты: jcb-git-workflow v1.0, jcb-dotenv v1.0 — {absolute('standards/llms.txt')}</code></pre>
-    <table>
-      <thead><tr><th>Файл</th><th>Что</th></tr></thead>
-      <tbody>
-        <tr><td><a href={page('standards/llms.txt')}>llms.txt</a></td><td>оглавление: как пользоваться и ссылки на <code>.md</code> всех стандартов</td></tr>
-        <tr><td><a href={page('standards/index.json')}>index.json</a></td><td>стандарты с текущими версиями и ссылками на все версии</td></tr>
-        <tr><td><a href={page('standards/llms-full.txt')}>llms-full.txt</a></td><td>все стандарты с приложениями одним файлом</td></tr>
-      </tbody>
-    </table>
+        <h2>Версии</h2>
+        <p>
+          <code>v&lt;старший&gt;.&lt;младший&gt;</code>. Правило поменялось по сути и проект может перестать соответствовать —
+          старший номер (<code>v2.0</code>). Добавилось или уточнилось с сохранением соответствия — младший (<code>v1.1</code>).{' '}
+          <code>v0.x</code> — черновик: меняется свободно, без новой старшей версии.
+        </p>
+        <p>
+          Текст принятой версии неизменен: <code>standards/&lt;имя&gt;/&lt;версия&gt;.md</code>, например{' '}
+          <a href={page('standards/dotenv/v1.0.md')}>standards/dotenv/v1.0.md</a>. Версия в шапке стандарта ведёт туда же.
+        </p>
+      </div>
+    </div>
+    <aside class="side">
+      <SideBlock title="Для Claude">
+        <p>Одна строка в <code>CLAUDE.md</code> проекта — принятые стандарты с версиями и оглавление:</p>
+        <pre class="wrap"><code>Стандарты: jcb-git-workflow v1.0, jcb-dotenv v1.0 — {absolute('standards/llms.txt')}</code></pre>
+      </SideBlock>
+      <SideBlock title="Файлы">
+        <ul>
+          <li><a href={page('standards/llms.txt')}>llms.txt</a> <span class="n">— оглавление</span></li>
+          <li><a href={page('standards/index.json')}>index.json</a> <span class="n">— версии</span></li>
+          <li><a href={page('standards/llms-full.txt')}>llms-full.txt</a> <span class="n">— всё одним файлом</span></li>
+        </ul>
+      </SideBlock>
+    </aside>
   </div>
 </Base>

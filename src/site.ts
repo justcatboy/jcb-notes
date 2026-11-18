@@ -49,6 +49,19 @@ export async function getStandards(): Promise<Standard[][]> {
   );
 }
 
+/** Номер приложения по id: «dotenv/appendix-2» → 2; у самого стандарта — undefined. */
+export function appendixNumber(id: string): number | undefined {
+  const n = id.match(/\/appendix-(\d+)$/)?.[1];
+  return n ? Number(n) : undefined;
+}
+
+/** Приложения стандарта по порядку номеров: standards/<имя>/appendix-1.md, appendix-2.md, … */
+export async function getAppendices(name: string): Promise<CollectionEntry<'standards'>[]> {
+  return (await getCollection('standards'))
+    .filter((entry) => entry.id.startsWith(`${name}/`) && appendixNumber(entry.id) !== undefined)
+    .sort((a, b) => appendixNumber(a.id)! - appendixNumber(b.id)!);
+}
+
 /** Посты, новые первыми. */
 export async function getPosts(): Promise<CollectionEntry<'blog'>[]> {
   return (await getCollection('blog')).sort(

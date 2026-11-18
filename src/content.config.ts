@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 
 // Формат полей проверяется при сборке: не тот — сборка падает.
 
-// standards/<имя>/index.md → «<имя>», standards/<имя>/appendix-1.md → «<имя>/appendix-1».
+// standards/<имя>/index.md → «<имя>», standards/<имя>/appendix-<N>.md → «<имя>/appendix-<N>» (приложения 1, 2, …).
 const standards = defineCollection({
   loader: glob({
     base: './src/content/standards',

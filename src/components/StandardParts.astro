@@ -1,0 +1,17 @@
+---
+// Стандарт и его приложения — над оглавлением: текущий выделен, остальные — ссылки.
+interface Props {
+  code: string;
+  parts: { label: string; href: string; current: boolean }[];
+  slot?: string;
+}
+
+const { code, parts } = Astro.props;
+---
+
+<nav class="toc-parts" aria-label="Стандарт и приложения">
+  <b>{code}</b>
+  <ul>
+    {parts.map((p) => <li>{p.current ? <span aria-current="page">{p.label}</span> : <a href={p.href}>{p.label}</a>}</li>)}
+  </ul>
+</nav>
