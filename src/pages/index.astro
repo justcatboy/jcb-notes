@@ -1,6 +1,7 @@
 ---
-// Главная — витрина обеих частей сайта: о чём он, три последние записи, стандарты. Полная лента — /blog/.
 import Calendar from '../components/Calendar.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { ads } from '../ads';
 import { day } from '../header';
 import Base from '../layouts/Base.astro';
 import { page } from '../markdown';
@@ -55,15 +56,7 @@ const standards = (await getStandards()).flat();
     </div>
     <aside class="side">
       <Calendar />
-      {
-        [1, 2].map(() => (
-          <div class="ad" role="note">
-            <span class="ad-label">реклама</span>
-            <p>Здесь могла быть ваша реклама</p>
-            <span class="ad-note">закажите прямо сейчас!</span>
-          </div>
-        ))
-      }
+      {ads.map((ad) => <AdSlot ad={ad} />)}
     </aside>
   </div>
 </Base>

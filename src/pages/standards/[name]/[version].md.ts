@@ -1,5 +1,3 @@
-// Неизменяемый текст стандарта по версии: /standards/dotenv/v1.0.md. На него ссылаются проекты,
-// принявшие «jcb-dotenv v1.0», — он не меняется, когда выходит новая версия.
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { standardVersions, type StandardVersion } from '../../../versions';
 

@@ -1,0 +1,101 @@
+---
+import type { Ad } from '../ads';
+
+interface Props {
+  ad: Ad;
+}
+
+const { title, text, href, label = 'реклама' } = Astro.props.ad;
+const Title = href ? 'a' : 'p';
+---
+
+<div class="side-slot">
+  <div class="ad" role="note">
+    <span class="ad-label">{label}</span>
+    <Title class="ad-title" href={href}>{title}</Title>
+    {text && <span class="ad-note">{text}</span>}
+  </div>
+  <div class="blocked-box" role="note" hidden>
+    <svg class="blocked-box-icon" viewBox="0 0 48 56" width="56" height="66" aria-hidden="true">
+      <path d="M24 3 L44 10 V27 C44 40 35 49 24 53 C13 49 4 40 4 27 V10 Z" />
+      <path d="M14 37 L19 20 L24 37 M16 31 H22" />
+      <path d="M28 20 V37 H31 C36 37 38 33 38 28.5 C38 24 36 20 31 20 Z" />
+      <path d="M9 44 L40 13" />
+    </svg>
+    <span class="blocked-box-sub">рекламу съел блокировщик</span>
+  </div>
+</div>
+
+<script>
+  const hidden = (el: Element) =>
+    !(el as HTMLElement).offsetHeight || getComputedStyle(el).display === 'none' || getComputedStyle(el).visibility === 'hidden';
+  const check = () => {
+    for (const slot of document.querySelectorAll('.side-slot')) {
+      const ad = slot.querySelector('.ad');
+      const parts = [...slot.querySelectorAll('.ad-label, .ad-note')];
+      if (!ad || hidden(ad) || parts.some(hidden)) {
+        ad?.setAttribute('hidden', '');
+        slot.querySelector<HTMLElement>('.blocked-box')!.hidden = false;
+      }
+    }
+  };
+  // /?adblock — имитация блокировщика в dev
+  if (import.meta.env.DEV && new URLSearchParams(location.search).has('adblock')) {
+    const style = document.createElement('style');
+    style.textContent = '.ad-label, .ad-note { display: none !important; }';
+    document.head.append(style);
+  }
+  // блокировщик прячет .ad* не сразу
+  setTimeout(check, 300);
+  setTimeout(check, 1500);
+</script>
+
+<style>
+  .ad,
+  .blocked-box {
+    position: relative;
+    border: 1px dashed var(--muted);
+    padding: 22px 14px 18px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .ad-title {
+    display: block;
+    margin: 0;
+    color: var(--fg);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+  a.ad-title {
+    color: var(--accent);
+  }
+  .ad-label {
+    position: absolute;
+    top: -0.75em;
+    left: 10px;
+    padding: 0 6px;
+    background: var(--bg);
+    font-size: 0.85em;
+  }
+  .ad-note,
+  .blocked-box-sub {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85em;
+  }
+  .blocked-box {
+    padding: 16px 14px 14px;
+  }
+  .blocked-box-icon {
+    display: block;
+    margin: 0 auto;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

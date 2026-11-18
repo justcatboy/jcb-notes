@@ -1,11 +1,9 @@
 ---
-// Все метки со счётом и ссылка на RSS — для правой колонки ленты.
 import { page } from '../markdown';
 import { countTags, getPosts } from '../site';
 import SideBlock from './SideBlock.astro';
 
 interface Props {
-  /** Текущая метка — без ссылки. */
   current?: string;
 }
 

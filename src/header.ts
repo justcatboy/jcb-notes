@@ -1,5 +1,3 @@
-// Строка шапки из полей frontmatter: «Стандарт jcb-dotenv - v1.0 - 2026-11-16» у стандарта, «2026-11-16» у поста.
-// Одна на сайт и на все .md (src/markdown.ts).
 interface HeaderFields {
   code?: string;
   version?: string;

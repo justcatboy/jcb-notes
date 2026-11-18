@@ -1,5 +1,4 @@
 ---
-// Пост: дата, метки, «Скачать .md», текст. Справа — оглавление, а если глав мало — «Ещё по метке».
 import type { GetStaticPaths } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
 import SideBlock from '../../components/SideBlock.astro';
@@ -14,7 +13,6 @@ import { tocItems } from '../../toc';
 export const getStaticPaths = (async () => {
   const posts = await getPosts();
   return posts.map((post) => {
-    // Похожие: больше общих меток — выше, при равенстве — новее (порядок getPosts).
     const related = posts
       .filter((other) => other.id !== post.id)
       .map((other) => ({ other, shared: other.data.tags.filter((tag) => post.data.tags.includes(tag)).length }))

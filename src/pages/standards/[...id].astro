@@ -1,6 +1,4 @@
 ---
-// Стандарт (/standards/dotenv/) и его приложения (/standards/dotenv/appendix-1/, appendix-2/, …).
-// У стандарта версия в шапке — ссылка на неизменяемый текст этой версии: её и копирует проект, принимая стандарт.
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import StandardParts from '../../components/StandardParts.astro';
@@ -26,7 +24,6 @@ const name = standard.id;
 const number = appendixNumber(entry.id);
 const isAppendix = number !== undefined;
 const label = (id: string) => (appendixNumber(id) ? `Приложение ${appendixNumber(id)}` : 'Стандарт');
-// Стандарт и его приложения по порядку — для меню справа и «назад / далее» внизу.
 const parts = [standard, ...(await getAppendices(name))];
 const index = parts.findIndex((p) => p.id === entry.id);
 const prev = parts[index - 1];
@@ -61,7 +58,6 @@ const partLinks = parts.map((p) => ({ label: label(p.id), href: page(`standards/
       </div>
     </header>
     {
-      // Стандарт и приложения — над оглавлением; без оглавления — тем же блоком отдельно.
       hasToc ? (
         <Toc headings={headings}>
           {hasParts && <StandardParts slot="parts" code={standard.data.code!} parts={partLinks} />}

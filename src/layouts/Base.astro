@@ -1,5 +1,4 @@
 ---
-// Каркас всех страниц: <head>, шапка с разделами, подвал с версией сайта.
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import '@fontsource/jetbrains-mono/400-italic.css';
@@ -11,16 +10,13 @@ import { siteTag, siteVersion } from '../version';
 interface Props {
   title?: string;
   description?: string;
-  /** Раздел в шапке: blog, standards, stack. */
   section?: 'blog' | 'standards' | 'stack';
-  /** Путь .md этой страницы (без ведущего /) — ссылка для Claude в <head>. */
   md?: string;
 }
 
 const { title, description, section, md } = Astro.props;
 const fullTitle = title ? `${title} — ${SITE_TITLE}` : SITE_TITLE;
 const versionHref = siteTag && `${REPO}/tree/${siteTag}`;
-// Год первой записи и, когда он уже прошёл, текущий год сборки: «2026», позже — «2026–2027».
 const FIRST_YEAR = 2026;
 const year = new Date().getFullYear();
 const copyrightYears = year > FIRST_YEAR ? `${FIRST_YEAR}–${year}` : `${FIRST_YEAR}`;
@@ -46,7 +42,7 @@ const nav = [
     <meta property="og:title" content={title ?? SITE_TITLE} />
     {description && <meta property="og:description" content={description} />}
     <script is:inline>
-      // Тема до отрисовки, чтобы не мигало: выбранная вручную — из localStorage, иначе — системная.
+      // до отрисовки, без мигания
       try {
         const t = localStorage.getItem('theme');
         if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;

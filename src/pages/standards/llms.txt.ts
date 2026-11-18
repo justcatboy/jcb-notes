@@ -1,4 +1,3 @@
-// /standards/llms.txt — оглавление стандартов для LLM (формат llmstxt.org): как пользоваться и где текст каждого в .md.
 import type { APIRoute } from 'astro';
 import { headerLine } from '../../header';
 import { absolute } from '../../markdown';
