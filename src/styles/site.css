@@ -68,6 +68,45 @@ body {
   .doc > .side { grid-area: side; align-self: start; }
 }
 
+/* календарь (правая колонка главной) */
+.cal-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.cal-title { font-weight: 700; color: var(--fg); }
+.cal-nav { font: inherit; color: var(--muted); background: none; border: 0; padding: 0 6px; cursor: pointer; }
+.cal-nav:hover { color: var(--fg); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; font-variant-numeric: tabular-nums; }
+.cal-grid > * { padding: 3px 0; border: 1px solid transparent; border-radius: 3px; }
+.cal-wd { color: var(--muted); font-size: 0.9em; }
+.cal-grid .cal-today { border-color: var(--fg); color: var(--fg); font-weight: 700; }
+.cal-grid .cal-post { position: relative; color: var(--accent); font-weight: 700; cursor: default; outline: none; }
+/* Подсказка «4 записи» над числом — при наведении и при нажатии (фокус). */
+.cal-post::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+  padding: 2px 8px; white-space: nowrap;
+  background: var(--fg); color: var(--bg); border-radius: 3px;
+  font-size: 0.9em; font-weight: 400; text-decoration: none;
+  opacity: 0; pointer-events: none; z-index: 1;
+}
+.cal-post.cal-l::after { left: 0; transform: none; }
+.cal-post.cal-r::after { left: auto; right: 0; transform: none; }
+.cal-post:hover::after, .cal-post:focus::after { opacity: 1; }
+.cal-post:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* шуточный рекламный блок */
+.ad {
+  position: relative;
+  border: 1px dashed var(--muted);
+  padding: 22px 14px 18px;
+  text-align: center;
+  color: var(--muted);
+}
+.ad p { margin: 0; color: var(--fg); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.5; }
+.ad-label {
+  position: absolute; top: -0.75em; left: 10px; padding: 0 6px;
+  background: var(--bg); font-size: 0.85em;
+}
+.ad-note { display: block; margin-top: 8px; font-size: 0.85em; }
+
 /* главная */
 .lead { margin-bottom: 40px; }
 .lead h1 { font-size: 1.6em; text-transform: none; letter-spacing: 0; margin-bottom: 0.6em; }

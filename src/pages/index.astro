@@ -1,7 +1,6 @@
 ---
 // Главная — витрина обеих частей сайта: о чём он, три последние записи, стандарты. Полная лента — /blog/.
-import SideBlock from '../components/SideBlock.astro';
-import TagsBlock from '../components/TagsBlock.astro';
+import Calendar from '../components/Calendar.astro';
 import { day } from '../header';
 import Base from '../layouts/Base.astro';
 import { page } from '../markdown';
@@ -55,13 +54,16 @@ const standards = (await getStandards()).flat();
       </section>
     </div>
     <aside class="side">
-      <TagsBlock />
-      <SideBlock title="Для Claude">
-        <ul>
-          <li><a href={page('standards/llms.txt')}>standards/llms.txt</a></li>
-          <li><a href={page('llms.txt')}>llms.txt</a></li>
-        </ul>
-      </SideBlock>
+      <Calendar />
+      {
+        [1, 2].map(() => (
+          <div class="ad" role="note">
+            <span class="ad-label">реклама</span>
+            <p>Здесь могла быть ваша реклама</p>
+            <span class="ad-note">закажите прямо сейчас!</span>
+          </div>
+        ))
+      }
     </aside>
   </div>
 </Base>
