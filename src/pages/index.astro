@@ -94,6 +94,13 @@ const standards = (await getStandards()).flat();
       }
     }
   };
+  // Только в npm run dev: /?adblock прячет рекламу тем же правилом, что uBlock, — проверить запасной блок.
+  // В сборку для сайта не попадает: import.meta.env.DEV при build — false, и ветку вырезает.
+  if (import.meta.env.DEV && new URLSearchParams(location.search).has('adblock')) {
+    const style = document.createElement('style');
+    style.textContent = '.ad-label, .ad-note { display: none !important; }';
+    document.head.append(style);
+  }
   setTimeout(check, 300);
   setTimeout(check, 1500);
 </script>
