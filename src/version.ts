@@ -1,12 +1,23 @@
 // Версия сайта при сборке — из git.
-// - В main (сборка на GitHub Pages) теги версий стоят на коммитах слияния: «v2026.002»
+// - В main (сборка на Cloudflare Pages) теги версий стоят на коммитах слияния: «v2026.002»
 //   или «v2026.002-1-g3ded221», если после версии были коммиты.
 // - В dev теги не входят (jcb-git-workflow: тег — только на слиянии в main): «v2026.002+dev».
 // - Нет git или тегов — «dev».
+// Cloudflare Pages (переменная CF_PAGES) скачивает репозиторий без истории и тегов — сначала докачиваем их.
 import { execSync } from 'node:child_process';
 
 const git = (args: string) =>
   execSync(`git ${args}`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+
+if (process.env.CF_PAGES) {
+  try {
+    git('fetch --unshallow --tags');
+  } catch {
+    try {
+      git('fetch --tags');
+    } catch {}
+  }
+}
 
 function describe(): string {
   try {
