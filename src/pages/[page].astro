@@ -1,0 +1,28 @@
+---
+// Отдельные страницы из src/content/pages: /stack/. Справа — оглавление уже с двух разделов.
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Toc from '../components/Toc.astro';
+import Base from '../layouts/Base.astro';
+import { page } from '../markdown';
+import { downloadName } from '../site';
+
+export const getStaticPaths = (async () =>
+  (await getCollection('pages')).map((entry) => ({ params: { page: entry.id }, props: { entry } }))) satisfies GetStaticPaths;
+
+const { entry } = Astro.props as { entry: CollectionEntry<'pages'> };
+const { Content, headings } = await render(entry);
+const md = `${entry.id}.md`;
+const section = entry.id === 'stack' ? 'stack' : undefined;
+---
+
+<Base title={entry.data.title} description={entry.data.description} section={section} md={md}>
+  <article class="doc">
+    <header class="doc-head">
+      <h1>{entry.data.title}</h1>
+      <div class="meta"><a class="dl" href={page(md)} download={downloadName('pages', entry.id)}>Скачать .md</a></div>
+    </header>
+    <Toc headings={headings} min={2} />
+    <div class="prose doc-body"><Content /></div>
+  </article>
+</Base>

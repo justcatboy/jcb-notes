@@ -1,0 +1,69 @@
+---
+// Главная — витрина обеих частей сайта: о чём он, три последние записи, стандарты. Полная лента — /blog/.
+import Calendar from '../components/Calendar.astro';
+import { day } from '../header';
+import Base from '../layouts/Base.astro';
+import { page } from '../markdown';
+import { getPosts, getStandards } from '../site';
+
+const posts = (await getPosts()).slice(0, 3);
+const standards = (await getStandards()).flat();
+---
+
+<Base description="Личный блог о разном и стандарты jcb-* для моих проектов.">
+  <div class="split">
+    <div class="split-main">
+      <div class="lead">
+        <h1>Личный блог</h1>
+        <p>Пишу о разном: о своих проектах и разработке, об инструментах и обо всём, что интересно.</p>
+        <p>
+          Отдельная часть сайта — стандарты <code>jcb-*</code>: правила, которые выросли из моих проектов. Проект принимает
+          их с версией и проверяет себя по ним.
+        </p>
+      </div>
+
+      <section class="home-section">
+        <h2 class="home-title">Последние записи</h2>
+        <ul class="compact">
+          {
+            posts.map((post) => (
+              <li>
+                <time datetime={day(post.data.date)}>{day(post.data.date)}</time>
+                <a href={page(`blog/${post.id}/`)}>{post.data.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="more" href={page('blog/')}>все записи →</a>
+      </section>
+
+      <section class="home-section">
+        <h2 class="home-title">Стандарты</h2>
+        <ul class="compact">
+          {
+            standards.map((entry) => (
+              <li>
+                <span class:list={['v', { draft: entry.data.version.startsWith('v0.') }]}>{entry.data.version}</span>
+                <a href={page(`standards/${entry.id}/`)}>{entry.data.title}</a>
+                <span class="code">{entry.data.code}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="more" href={page('standards/')}>все стандарты и как ими пользоваться →</a>
+      </section>
+    </div>
+    <aside class="side">
+      <Calendar />
+      {
+        [1, 2].map(() => (
+          <div class="ad" role="note">
+            <span class="ad-label">реклама</span>
+            <p>Здесь могла быть ваша реклама</p>
+            <span class="ad-note">закажите прямо сейчас!</span>
+          </div>
+        ))
+      }
+    </aside>
+  </div>
+</Base>

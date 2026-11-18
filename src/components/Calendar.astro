@@ -1,0 +1,39 @@
+---
+// Календарь: текущий месяц, сегодня обведено, дни с записями выделены (при наведении — сколько), стрелками — соседние месяцы.
+// При сборке — месяц сборки; в браузере перерисовывается на сегодняшний.
+import { dayKey, renderMonth, type CalendarPost } from '../calendar';
+import { day } from '../header';
+import { page } from '../markdown';
+import { getPosts } from '../site';
+
+const posts: Record<string, CalendarPost[]> = {};
+for (const post of await getPosts()) {
+  (posts[day(post.data.date)] ??= []).push({ title: post.data.title, url: page(`blog/${post.id}/`) });
+}
+const now = new Date();
+const html = renderMonth(now.getFullYear(), now.getMonth(), dayKey(now.getFullYear(), now.getMonth(), now.getDate()), posts);
+---
+
+<section class="side-block cal" data-posts={JSON.stringify(posts)} aria-label="Календарь" set:html={html} />
+
+<script>
+  import { dayKey, renderMonth, type CalendarPost } from '../calendar';
+
+  for (const el of document.querySelectorAll<HTMLElement>('.cal')) {
+    const posts = JSON.parse(el.dataset.posts ?? '{}') as Record<string, CalendarPost[]>;
+    const now = new Date();
+    const today = dayKey(now.getFullYear(), now.getMonth(), now.getDate());
+    let y = now.getFullYear();
+    let m = now.getMonth();
+    const draw = () => (el.innerHTML = renderMonth(y, m, today, posts));
+    el.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.cal-nav');
+      if (!button) return;
+      m += Number(button.dataset.step);
+      if (m < 0) (m = 11), y--;
+      if (m > 11) (m = 0), y++;
+      draw();
+    });
+    draw();
+  }
+</script>

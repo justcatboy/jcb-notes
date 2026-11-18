@@ -1,0 +1,21 @@
+---
+// Все посты; справа — метки и RSS.
+import PostList from '../../components/PostList.astro';
+import TagsBlock from '../../components/TagsBlock.astro';
+import Base from '../../layouts/Base.astro';
+import { page } from '../../markdown';
+import { getPosts } from '../../site';
+
+const posts = await getPosts();
+---
+
+<Base title="Блог" description="Личный блог: записи о разном — от разработки до всего, что интересно." section="blog">
+  <div class="split">
+    <div class="split-main">
+      <h1>Блог</h1>
+      <p class="intro">Личный блог: записи о разном — от разработки до всего, что интересно. Гайды — с меткой{' '}<a href={page('blog/tags/гайд/')}>#гайд</a>.</p>
+      <PostList posts={posts} />
+    </div>
+    <aside class="side"><TagsBlock /></aside>
+  </div>
+</Base>
