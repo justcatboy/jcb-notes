@@ -8,7 +8,10 @@ import { page } from '../markdown';
 import { getPosts, getStandards } from '../site';
 
 const posts = (await getPosts()).slice(0, 3);
-const standards = (await getStandards()).flat();
+const standards = (await getStandards())
+  .flat()
+  .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
+  .slice(0, 5);
 ---
 
 <Base description="Личный блог о разном и стандарты jcb-* для моих проектов.">
