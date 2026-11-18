@@ -1,9 +1,11 @@
 // Версии стандартов — неизменяемые адреса /standards/<имя>/<версия>.md.
 // Текущая версия — из коллекции (то, что сейчас на сайте); прошлые — из истории git: для каждой версии
-// берётся последний коммит, где в файле стояла эта версия. На GitHub сборке нужна вся история (fetch-depth: 0).
+// берётся последний коммит, где в файле стояла эта версия. Сборке нужна вся история — на Cloudflare её докачивает
+// src/version.ts.
 import { execFileSync } from 'node:child_process';
-import { getCollection, type CollectionEntry } from 'astro:content';
 import { toMarkdown } from './markdown';
+import { getStandards } from './site';
+import './version'; // на Cloudflare докачивает историю до чтения git log
 
 export interface StandardVersion {
   /** Имя папки стандарта: dotenv. */
@@ -55,12 +57,9 @@ let cache: Promise<StandardVersion[]> | undefined;
 /** Все версии всех стандартов: текущие (из коллекции) и прошлые (из git), новые первыми. */
 export function standardVersions(): Promise<StandardVersion[]> {
   cache ??= (async () => {
-    const standards = (await getCollection('docs')).filter(
-      (entry): entry is CollectionEntry<'docs'> & { data: { code: string; version: string } } =>
-        Boolean(entry.data.code && entry.data.version),
-    );
+    const standards = (await getStandards()).flat();
     return standards.flatMap((entry) => {
-      const name = entry.id.replace(/^standards\//, '');
+      const name = entry.id;
       const current: StandardVersion = {
         name,
         code: entry.data.code,

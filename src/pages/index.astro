@@ -1,0 +1,21 @@
+---
+// Главная: пара строк о сайте и лента постов.
+import PostList from '../components/PostList.astro';
+import Base from '../layouts/Base.astro';
+import { page } from '../markdown';
+import { getPosts } from '../site';
+
+const posts = await getPosts();
+---
+
+<Base description="Блог о том, как я веду свои проекты, гайды и стандарты jcb-*." section="blog">
+  <div class="intro">
+    <p>Пишу о том, как веду свои проекты: ветки и версии, настройки окружения, порты, проверки, выкладка, внешние службы.</p>
+    <p>
+      Правила, которые из этого выросли, собраны в <a href={page('standards/')}>стандарты jcb-*</a>: проект принимает
+      их с версией и проверяет себя по ним. Гайды — посты с меткой{' '}<a href={page('blog/tags/гайд/')}>#гайд</a>.
+    </p>
+  </div>
+  <h1 class="feed-title">Записи</h1>
+  <PostList posts={posts} />
+</Base>

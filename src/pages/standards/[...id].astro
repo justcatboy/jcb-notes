@@ -1,0 +1,58 @@
+---
+// Стандарт (/standards/dotenv/) и его приложение (/standards/dotenv/appendix-1/).
+// У стандарта версия в шапке — ссылка на неизменяемый текст этой версии: её и копирует проект, принимая стандарт.
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Toc from '../../components/Toc.astro';
+import { day } from '../../header';
+import Base from '../../layouts/Base.astro';
+import { page } from '../../markdown';
+import { downloadName } from '../../site';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('standards');
+  return all.map((entry) => {
+    const name = entry.id.split('/')[0];
+    return { params: { id: entry.id }, props: { entry, standard: all.find((e) => e.id === name)! } };
+  });
+}) satisfies GetStaticPaths;
+
+const { entry, standard } = Astro.props as { entry: CollectionEntry<'standards'>; standard: CollectionEntry<'standards'> };
+const { Content, headings } = await render(entry);
+const isAppendix = entry.id !== standard.id;
+const { code, version, date } = entry.data;
+const name = standard.id;
+const appendixId = `${name}/appendix-1`;
+const hasAppendix = !isAppendix && (await getCollection('standards')).some((e) => e.id === appendixId);
+const md = `standards/${entry.id}.md`;
+---
+
+<Base title={isAppendix ? `${standard.data.code}: приложение 1` : entry.data.title} section="standards" md={md}>
+  <article>
+    <div class="crumbs">
+      <a href={page('standards/')}>стандарты</a> /{' '}
+      {isAppendix ? <><a href={page(`standards/${name}/`)}>{standard.data.code}</a> / приложение 1</> : code}
+    </div>
+    <h1>{isAppendix ? 'Приложение 1' : entry.data.title}</h1>
+    <div class="meta">
+      {
+        code && version ? (
+          <span>
+            Стандарт {code} -{' '}
+            <a href={page(`standards/${name}/${version}.md`)} title="Неизменяемый текст этой версии — для ссылки из проекта">{version}</a>
+            {date && ` - ${day(date)}`}
+          </span>
+        ) : (
+          <span>к стандарту <a href={page(`standards/${name}/`)}>{standard.data.title}</a></span>
+        )
+      }
+      <a class="dl" href={page(md)} download={downloadName('standards', entry.id)}>Скачать .md</a>
+    </div>
+    <Toc headings={headings} />
+    <div class="prose"><Content /></div>
+    <nav class="pager" aria-label="Стандарт и приложение">
+      {isAppendix && <a href={page(`standards/${name}/`)}>← {standard.data.code}</a>}
+      {hasAppendix && <a href={page(`standards/${appendixId}/`)} style="margin-left:auto">Приложение 1: как я выполняю стандарт →</a>}
+    </nav>
+  </article>
+</Base>

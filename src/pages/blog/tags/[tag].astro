@@ -1,0 +1,25 @@
+---
+// Посты с одной меткой: /blog/tags/гайд/.
+import type { GetStaticPaths } from 'astro';
+import PostList from '../../../components/PostList.astro';
+import Base from '../../../layouts/Base.astro';
+import { page } from '../../../markdown';
+import { countTags, getPosts } from '../../../site';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return countTags(posts).map(([tag]) => ({
+    params: { tag },
+    props: { posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Base title={`#${tag}`} description={`Записи с меткой «${tag}».`} section="blog">
+  <div class="crumbs"><a href={page('blog/')}>блог</a> / метки</div>
+  <h1>#{tag}</h1>
+  <PostList posts={posts} />
+</Base>

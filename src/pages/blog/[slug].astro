@@ -1,0 +1,34 @@
+---
+// Пост: дата, метки, «Скачать .md», оглавление, текст.
+import type { GetStaticPaths } from 'astro';
+import { render, type CollectionEntry } from 'astro:content';
+import Tags from '../../components/Tags.astro';
+import Toc from '../../components/Toc.astro';
+import { day } from '../../header';
+import Base from '../../layouts/Base.astro';
+import { page } from '../../markdown';
+import { downloadName, getPosts } from '../../site';
+
+export const getStaticPaths = (async () =>
+  (await getPosts()).map((post) => ({ params: { slug: post.id }, props: { post } }))) satisfies GetStaticPaths;
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+const { Content, headings } = await render(post);
+const { title, description, date, updated, tags } = post.data;
+const md = `blog/${post.id}.md`;
+---
+
+<Base title={title} description={description} section="blog" md={md}>
+  <article>
+    <div class="crumbs"><a href={page('blog/')}>блог</a></div>
+    <h1>{title}</h1>
+    <div class="meta">
+      <time datetime={day(date)}>{day(date)}</time>
+      {updated && <span>обновлено <time datetime={day(updated)}>{day(updated)}</time></span>}
+      <Tags tags={tags} />
+      <a class="dl" href={page(md)} download={downloadName('blog', post.id)}>Скачать .md</a>
+    </div>
+    <Toc headings={headings} />
+    <div class="prose"><Content /></div>
+  </article>
+</Base>

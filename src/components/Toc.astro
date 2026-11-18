@@ -1,0 +1,25 @@
+---
+// Оглавление по разделам ## — когда их хотя бы три.
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const items = Astro.props.headings.filter((h) => h.depth === 2);
+---
+
+{
+  items.length >= 3 && (
+    <nav class="toc" aria-label="Содержание">
+      <b>Содержание</b>
+      <ul>
+        {items.map((h) => (
+          <li>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

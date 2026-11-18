@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+import { page } from '../markdown';
+---
+
+<Base title="Страница не найдена">
+  <h1>404</h1>
+  <p>Такой страницы здесь нет. Начать можно с <a href={page('')}>ленты</a> или <a href={page('standards/')}>списка стандартов</a>.</p>
+</Base>

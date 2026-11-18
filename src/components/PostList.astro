@@ -1,0 +1,28 @@
+---
+// Лента постов: дата, заголовок, описание, метки.
+import type { CollectionEntry } from 'astro:content';
+import { day } from '../header';
+import { page } from '../markdown';
+import Tags from './Tags.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+---
+
+<ol class="posts">
+  {
+    Astro.props.posts.map((post) => (
+      <li class="post">
+        <time datetime={day(post.data.date)}>{day(post.data.date)}</time>
+        <div>
+          <h2 class="post-title">
+            <a href={page(`blog/${post.id}/`)}>{post.data.title}</a>
+          </h2>
+          <p>{post.data.description}</p>
+          <Tags tags={post.data.tags} />
+        </div>
+      </li>
+    ))
+  }
+</ol>
