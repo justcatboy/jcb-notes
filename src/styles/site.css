@@ -1,4 +1,3 @@
-/* Стиль «бумага»: всё моношрифтом JetBrains Mono, тёплый светлый фон, ссылки подчёркнуты, одна колонка 72ch. */
 :root {
   --bg: #f8f6f1;
   --fg: #27241f;
@@ -21,7 +20,6 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-/* Место под полосу прокрутки — всегда: короткие и длинные страницы не сдвигаются друг относительно друга. */
 html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 body {
   margin: 0;
@@ -32,7 +30,6 @@ body {
 }
 @media (max-width: 560px) { body { font-size: 14px; } }
 
-/* Одна ширина на весь сайт. Подвал прижат к низу, когда текста мало. */
 .col {
   max-width: calc(72ch + 2 * 16px);
   min-height: 100vh;
@@ -43,13 +40,11 @@ body {
   flex-direction: column;
 }
 .col > main { flex: 1 0 auto; }
-/* Широкий экран: колонка текста 72ch всегда на одном месте слева, справа — место под оглавление. */
 @media (min-width: 1100px) {
   .col { max-width: calc(72ch + 26ch + 56px + 2 * 16px); }
   .col > main > :not(.doc):not(.split) { max-width: 72ch; }
 }
 
-/* Две колонки: текст и правая колонка (.side). На узком экране правая колонка — под текстом. */
 .side { font-size: 0.86em; line-height: 1.5; display: grid; gap: 26px; align-content: start; min-width: 0; }
 .side-title { font-size: 1em; font-weight: 700; color: var(--muted); margin: 0 0 6px; text-transform: none; letter-spacing: 0; }
 .side ul { margin: 0; padding: 0; list-style: none; }
@@ -68,7 +63,6 @@ body {
   .doc > .side { grid-area: side; align-self: start; }
 }
 
-/* календарь (правая колонка главной) */
 .cal-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
 .cal-title { font-weight: 700; color: var(--fg); }
 .cal-nav { font: inherit; color: var(--muted); background: none; border: 0; padding: 0 6px; cursor: pointer; }
@@ -78,7 +72,6 @@ body {
 .cal-wd { color: var(--muted); font-size: 0.9em; }
 .cal-grid .cal-today { border-color: var(--fg); color: var(--fg); font-weight: 700; }
 .cal-grid .cal-post { position: relative; color: var(--accent); font-weight: 700; cursor: default; outline: none; }
-/* Подсказка «4 записи» над числом — при наведении и при нажатии (фокус). */
 .cal-post::after {
   content: attr(data-tip);
   position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%);
@@ -92,7 +85,6 @@ body {
 .cal-post:hover::after, .cal-post:focus::after { opacity: 1; }
 .cal-post:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-/* Шуточный рекламный блок (.ad*) и запасной (.blocked-box) — на случай, если блокировщик рекламы спрятал первый. */
 [hidden] { display: none !important; }
 .ad, .blocked-box {
   position: relative;
@@ -205,7 +197,6 @@ th { color: var(--muted); font-weight: 700; }
 .meta a:hover { color: var(--fg); }
 .meta .dl { margin-left: auto; color: var(--accent); text-decoration: none; border: 1px solid var(--line); padding: 1px 8px; border-radius: 3px; }
 .meta .dl:hover { border-color: var(--accent); color: var(--accent); }
-/* Оглавление на узком экране: над текстом строка «стандарт · приложения» и свёрнутый блок «Содержание». */
 .toc { font-size: 0.86em; margin: 0 0 28px; padding: 10px 0; border-block: 1px solid var(--line); }
 .toc-parts { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
 .toc-parts b { color: var(--muted); }
@@ -222,8 +213,6 @@ th { color: var(--muted); font-weight: 700; }
 .toc a { text-decoration: none; }
 .toc a:hover { text-decoration: underline; }
 
-/* Статья. Узкий экран: оглавление над текстом, правая колонка (.side) — под ним.
-   Широкий: оглавление или .side — колонка справа; оглавление всегда раскрыто и закреплено при прокрутке. */
 .doc { display: flex; flex-direction: column; }
 .doc > * { min-width: 0; }
 .doc > .side { order: 10; }
@@ -286,7 +275,6 @@ th { color: var(--muted); font-weight: 700; }
 .std-table td.code, .std-table td.v { white-space: nowrap; }
 .std-table td.v { font-variant-numeric: tabular-nums; }
 .std-table td.apps a + a { margin-left: 10px; }
-/* Черта между группами: двойная толще одинарной — в border-collapse побеждает нижнюю границу соседней строки. */
 .std-table tr.group-start td { border-top: 3px double var(--line); }
 .draft { color: var(--muted); }
 

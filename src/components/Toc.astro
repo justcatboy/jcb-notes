@@ -1,13 +1,9 @@
 ---
-// Оглавление по разделам ## — когда их не меньше min. Над ним — необязательный слот «parts» (стандарт и приложения).
-// Широкий экран: колонка справа, закреплена при прокрутке, текущий раздел подсвечен.
-// Узкий: над текстом; «parts» — строкой, «Содержание» — свёрнутым блоком.
 import type { MarkdownHeading } from 'astro';
 import { tocItems } from '../toc';
 
 interface Props {
   headings: MarkdownHeading[];
-  /** Сколько разделов нужно, чтобы показать оглавление. */
   min?: number;
 }
 
@@ -35,7 +31,7 @@ const items = tocItems(Astro.props.headings, Astro.props.min);
 }
 
 <script is:inline>
-  // Широкий экран — оглавление раскрыто всегда (до отрисовки, без мигания); узкий — свёрнуто.
+  // до отрисовки, без мигания
   (() => {
     const toc = document.getElementById('toc-details');
     if (!toc) return;
@@ -47,7 +43,6 @@ const items = tocItems(Astro.props.headings, Astro.props.min);
 </script>
 
 <script>
-  // Подсветка раздела, который сейчас читают: последний заголовок, ушедший выше трети экрана.
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc-list a')];
   const targets = links
     .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))

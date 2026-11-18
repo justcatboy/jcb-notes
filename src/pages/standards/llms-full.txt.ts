@@ -1,4 +1,3 @@
-// /standards/llms-full.txt — все стандарты с приложениями одним файлом, текущие версии. Для Claude: один запрос вместо многих.
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { absolute, toMarkdown } from '../../markdown';

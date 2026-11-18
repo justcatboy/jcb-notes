@@ -1,4 +1,3 @@
-// /llms.txt — оглавление сайта для LLM (формат llmstxt.org). Стандарты — отдельным оглавлением в /standards/llms.txt.
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { absolute } from '../markdown';

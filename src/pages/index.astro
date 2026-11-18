@@ -1,5 +1,4 @@
 ---
-// Главная — витрина обеих частей сайта: о чём он, три последние записи, стандарты. Полная лента — /blog/.
 import Calendar from '../components/Calendar.astro';
 import { day } from '../header';
 import Base from '../layouts/Base.astro';
@@ -56,8 +55,6 @@ const standards = (await getStandards()).flat();
     <aside class="side">
       <Calendar />
       {
-        // Шуточная «реклама» — с классами ad*, их прячут блокировщики. Рядом — запасной блок с нейтральными
-        // классами: его показывает скрипт ниже, если блокировщик спрятал рекламу.
         [1, 2].map(() => (
           <div class="joke-slot">
             <div class="ad" role="note">
@@ -82,7 +79,7 @@ const standards = (await getStandards()).flat();
 </Base>
 
 <script>
-  // Блокировщик рекламы прячет .ad / .ad-label / .ad-note (иногда не сразу) — тогда вместо них запасной блок.
+  // блокировщик прячет .ad* не сразу
   const hidden = (el: Element | null) =>
     !el || !(el as HTMLElement).offsetHeight || getComputedStyle(el).display === 'none' || getComputedStyle(el).visibility === 'hidden';
   const check = () => {
@@ -94,8 +91,7 @@ const standards = (await getStandards()).flat();
       }
     }
   };
-  // Только в npm run dev: /?adblock прячет рекламу тем же правилом, что uBlock, — проверить запасной блок.
-  // В сборку для сайта не попадает: import.meta.env.DEV при build — false, и ветку вырезает.
+  // /?adblock — имитация блокировщика в dev
   if (import.meta.env.DEV && new URLSearchParams(location.search).has('adblock')) {
     const style = document.createElement('style');
     style.textContent = '.ad-label, .ad-note { display: none !important; }';

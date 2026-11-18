@@ -1,14 +1,9 @@
-// Версии стандартов — неизменяемые адреса /standards/<имя>/<версия>.md.
-// Текущая версия — из коллекции (то, что сейчас на сайте); прошлые — из истории git: для каждой версии
-// берётся последний коммит, где в файле стояла эта версия. Сборке нужна вся история — на Cloudflare её докачивает
-// src/version.ts.
 import { execFileSync } from 'node:child_process';
 import { toMarkdown } from './markdown';
 import { getStandards } from './site';
-import './version'; // на Cloudflare докачивает историю до чтения git log
+import './version'; // докачивает историю на Cloudflare
 
 export interface StandardVersion {
-  /** Имя папки стандарта: dotenv. */
   name: string;
   code: string;
   version: string;
@@ -22,11 +17,9 @@ const git = (...args: string[]) =>
 const field = (frontmatter: string, name: string) =>
   frontmatter.match(new RegExp(`^${name}:\\s*['"]?(.+?)['"]?\\s*$`, 'm'))?.[1];
 
-/** Прошлые версии файла из git: версия → Markdown последнего коммита с этой версией. */
 function fromHistory(file: string): Omit<StandardVersion, 'name'>[] {
   let log: string;
   try {
-    // По коммитам от новых к старым, с путём файла в каждом (--follow — через переименования).
     log = git('log', '--follow', '--format=%x00%H', '--name-only', '--', file);
   } catch {
     return [];
@@ -54,7 +47,6 @@ function fromHistory(file: string): Omit<StandardVersion, 'name'>[] {
 
 let cache: Promise<StandardVersion[]> | undefined;
 
-/** Все версии всех стандартов: текущие (из коллекции) и прошлые (из git), новые первыми. */
 export function standardVersions(): Promise<StandardVersion[]> {
   cache ??= (async () => {
     const standards = (await getStandards()).flat();

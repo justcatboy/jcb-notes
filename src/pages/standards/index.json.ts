@@ -1,5 +1,3 @@
-// Машиночитаемый список стандартов: /standards/index.json. Для Claude и скриптов в других проектах:
-// какая версия текущая, где её текст, какие версии были.
 import type { APIRoute } from 'astro';
 import { day } from '../../header';
 import { absolute } from '../../markdown';
