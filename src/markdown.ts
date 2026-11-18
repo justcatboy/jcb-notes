@@ -5,9 +5,9 @@ import { headerLine } from './header';
 const site = (import.meta.env.SITE ?? '').replace(/\/$/, '');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-/** Путь внутри сайта с base: page('standards/dotenv.md') → /jcb-notes/standards/dotenv.md */
+/** Путь внутри сайта с base: page('standards/dotenv.md') → /standards/dotenv.md */
 export const page = (path: string) => `${base}/${path.replace(/^\//, '')}`;
-/** Полный адрес: absolute('standards/dotenv.md') → https://…/jcb-notes/standards/dotenv.md */
+/** Полный адрес: absolute('standards/dotenv.md') → https://jcb-notes.pages.dev/standards/dotenv.md */
 export const absolute = (path: string) => `${site}${page(path)}`;
 
 export interface DocHeader {

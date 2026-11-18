@@ -22,9 +22,8 @@ const standards = standardGroups.flatMap((group, g) =>
 );
 
 export default defineConfig({
-  // GitHub Pages: https://justcatboy.github.io/jcb-notes/
-  site: 'https://justcatboy.github.io',
-  base: '/jcb-notes',
+  // Cloudflare Pages: собирает и выкладывает сам при push в main.
+  site: 'https://jcb-notes.pages.dev',
   integrations: [
     starlight({
       title: 'JCB-NOTES',
@@ -34,7 +33,7 @@ export default defineConfig({
       social: [{ icon: 'github', label: 'Исходники на GitHub', href: 'https://github.com/justcatboy/jcb-notes' }],
       customCss: ['./src/styles/custom.css'],
       // Для Claude: оглавление сайта и .md каждой страницы (src/routeData.ts).
-      head: [{ tag: 'link', attrs: { rel: 'alternate', type: 'text/plain', title: 'llms.txt', href: '/jcb-notes/llms.txt' } }],
+      head: [{ tag: 'link', attrs: { rel: 'alternate', type: 'text/plain', title: 'llms.txt', href: '/llms.txt' } }],
       routeMiddleware: './src/routeData.ts',
       components: {
         Footer: './src/components/Footer.astro',

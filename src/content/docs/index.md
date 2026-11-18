@@ -40,7 +40,7 @@ template: splash
 оглавление:
 
 ```md
-Стандарты: jcb-git-workflow v1.0, jcb-dotenv v1.0 — https://justcatboy.github.io/jcb-notes/llms.txt
+Стандарты: jcb-git-workflow v1.0, jcb-dotenv v1.0 — https://jcb-notes.pages.dev/llms.txt
 ```
 
 | Файл | Что |
