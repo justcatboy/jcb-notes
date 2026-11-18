@@ -243,7 +243,8 @@ th { color: var(--muted); font-weight: 700; }
 .std-table td.code, .std-table td.v { white-space: nowrap; }
 .std-table td.v { font-variant-numeric: tabular-nums; }
 .std-table td.apps a + a { margin-left: 10px; }
-.std-table tr.group-start td { border-top: 1px dashed var(--muted); }
+/* Черта между группами: двойная толще одинарной — в border-collapse побеждает нижнюю границу соседней строки. */
+.std-table tr.group-start td { border-top: 3px double var(--line); }
 .draft { color: var(--muted); }
 
 /* подвал */
