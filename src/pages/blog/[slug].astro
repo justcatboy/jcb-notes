@@ -1,34 +1,69 @@
 ---
-// Пост: дата, метки, «Скачать .md», оглавление, текст.
+// Пост: дата, метки, «Скачать .md», текст. Справа — оглавление, а если глав мало — «Ещё по метке».
 import type { GetStaticPaths } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
+import SideBlock from '../../components/SideBlock.astro';
 import Tags from '../../components/Tags.astro';
 import Toc from '../../components/Toc.astro';
 import { day } from '../../header';
 import Base from '../../layouts/Base.astro';
 import { page } from '../../markdown';
 import { downloadName, getPosts } from '../../site';
+import { tocItems } from '../../toc';
 
-export const getStaticPaths = (async () =>
-  (await getPosts()).map((post) => ({ params: { slug: post.id }, props: { post } }))) satisfies GetStaticPaths;
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post) => {
+    // Похожие: больше общих меток — выше, при равенстве — новее (порядок getPosts).
+    const related = posts
+      .filter((other) => other.id !== post.id)
+      .map((other) => ({ other, shared: other.data.tags.filter((tag) => post.data.tags.includes(tag)).length }))
+      .filter(({ shared }) => shared > 0)
+      .sort((a, b) => b.shared - a.shared)
+      .slice(0, 3)
+      .map(({ other }) => other);
+    return { params: { slug: post.id }, props: { post, related } };
+  });
+}) satisfies GetStaticPaths;
 
-const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+const { post, related } = Astro.props as { post: CollectionEntry<'blog'>; related: CollectionEntry<'blog'>[] };
 const { Content, headings } = await render(post);
 const { title, description, date, updated, tags } = post.data;
 const md = `blog/${post.id}.md`;
+const hasToc = tocItems(headings).length > 0;
 ---
 
 <Base title={title} description={description} section="blog" md={md}>
-  <article>
-    <div class="crumbs"><a href={page('blog/')}>блог</a></div>
-    <h1>{title}</h1>
-    <div class="meta">
-      <time datetime={day(date)}>{day(date)}</time>
-      {updated && <span>обновлено <time datetime={day(updated)}>{day(updated)}</time></span>}
-      <Tags tags={tags} />
-      <a class="dl" href={page(md)} download={downloadName('blog', post.id)}>Скачать .md</a>
-    </div>
-    <Toc headings={headings} />
-    <div class="prose"><Content /></div>
+  <article class="doc">
+    <header class="doc-head">
+      <div class="crumbs"><a href={page('blog/')}>блог</a></div>
+      <h1>{title}</h1>
+      <div class="meta">
+        <time datetime={day(date)}>{day(date)}</time>
+        {updated && <span>обновлено <time datetime={day(updated)}>{day(updated)}</time></span>}
+        <Tags tags={tags} />
+        <a class="dl" href={page(md)} download={downloadName('blog', post.id)}>Скачать .md</a>
+      </div>
+    </header>
+    {
+      hasToc ? (
+        <Toc headings={headings} />
+      ) : (
+        related.length > 0 && (
+          <aside class="side">
+            <SideBlock title="Ещё по метке">
+              <ul>
+                {related.map((other) => (
+                  <li>
+                    <a href={page(`blog/${other.id}/`)}>{other.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </SideBlock>
+          </aside>
+        )
+      )
+    }
+    <div class="prose doc-body"><Content /></div>
   </article>
 </Base>

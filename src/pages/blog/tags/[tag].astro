@@ -1,7 +1,8 @@
 ---
-// Посты с одной меткой: /blog/tags/гайд/.
+// Посты с одной меткой: /blog/tags/гайд/; справа — все метки и RSS.
 import type { GetStaticPaths } from 'astro';
 import PostList from '../../../components/PostList.astro';
+import TagsBlock from '../../../components/TagsBlock.astro';
 import Base from '../../../layouts/Base.astro';
 import { page } from '../../../markdown';
 import { countTags, getPosts } from '../../../site';
@@ -19,7 +20,12 @@ const { posts } = Astro.props;
 ---
 
 <Base title={`#${tag}`} description={`Записи с меткой «${tag}».`} section="blog">
-  <div class="crumbs"><a href={page('blog/')}>блог</a> / метки</div>
-  <h1>#{tag}</h1>
-  <PostList posts={posts} />
+  <div class="split">
+    <div class="split-main">
+      <div class="crumbs"><a href={page('blog/')}>блог</a> / метки</div>
+      <h1>#{tag}</h1>
+      <PostList posts={posts} />
+    </div>
+    <aside class="side"><TagsBlock current={tag} /></aside>
+  </div>
 </Base>

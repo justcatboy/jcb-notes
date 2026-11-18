@@ -1,25 +1,69 @@
 ---
-// Оглавление по разделам ## — когда их хотя бы три.
+// Оглавление по разделам ## — когда их не меньше min. Над ним — необязательный слот «parts» (стандарт и приложения).
+// Широкий экран: колонка справа, закреплена при прокрутке, текущий раздел подсвечен.
+// Узкий: над текстом; «parts» — строкой, «Содержание» — свёрнутым блоком.
 import type { MarkdownHeading } from 'astro';
+import { tocItems } from '../toc';
 
 interface Props {
   headings: MarkdownHeading[];
+  /** Сколько разделов нужно, чтобы показать оглавление. */
+  min?: number;
 }
 
-const items = Astro.props.headings.filter((h) => h.depth === 2);
+const items = tocItems(Astro.props.headings, Astro.props.min);
 ---
 
 {
-  items.length >= 3 && (
-    <nav class="toc" aria-label="Содержание">
-      <b>Содержание</b>
-      <ul>
-        {items.map((h) => (
-          <li>
-            <a href={`#${h.slug}`}>{h.text}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+  items.length > 0 && (
+    <div class="toc">
+      <slot name="parts" />
+      <details class="toc-details" id="toc-details">
+        <summary>Содержание</summary>
+        <nav class="toc-list" aria-label="Содержание">
+          <ul>
+            {items.map((h) => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    </div>
   )
 }
+
+<script is:inline>
+  // Широкий экран — оглавление раскрыто всегда (до отрисовки, без мигания); узкий — свёрнуто.
+  (() => {
+    const toc = document.getElementById('toc-details');
+    if (!toc) return;
+    const wide = matchMedia('(min-width: 1100px)');
+    const sync = () => (toc.open = wide.matches);
+    sync();
+    wide.addEventListener('change', sync);
+  })();
+</script>
+
+<script>
+  // Подсветка раздела, который сейчас читают: последний заголовок, ушедший выше трети экрана.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc-list a')];
+  const targets = links
+    .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+    .filter((el): el is HTMLElement => Boolean(el));
+  if (targets.length) {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = innerHeight / 3;
+      let current = -1;
+      targets.forEach((el, i) => {
+        if (el.getBoundingClientRect().top <= line) current = i;
+      });
+      links.forEach((a, i) => (i === current ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    };
+    addEventListener('scroll', () => (frame ||= requestAnimationFrame(update)), { passive: true });
+    update();
+  }
+</script>
