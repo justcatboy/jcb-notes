@@ -68,6 +68,27 @@ body {
   .doc > .side { grid-area: side; align-self: start; }
 }
 
+/* главная */
+.lead { margin-bottom: 40px; }
+.lead h1 { font-size: 1.6em; text-transform: none; letter-spacing: 0; margin-bottom: 0.6em; }
+.lead p { color: var(--muted); }
+.lead p:first-of-type { color: var(--fg); }
+.home-section { margin-bottom: 40px; }
+.home-title { font-size: 1em; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 12px; }
+.home-title::after { content: ''; display: block; border-bottom: 1px dashed var(--line); margin-top: 0.4em; }
+.compact { margin: 0 0 10px; padding: 0; list-style: none; }
+.compact li { display: grid; grid-template-columns: 11ch minmax(0, 1fr) auto; gap: 2px 18px; padding: 5px 0; align-items: baseline; }
+.compact time, .compact .v { color: var(--muted); font-size: 0.88em; font-variant-numeric: tabular-nums; }
+.compact .v.draft { opacity: 0.75; }
+.compact a { color: var(--fg); text-decoration: none; }
+.compact a:hover { color: var(--accent); text-decoration: underline; }
+.compact .code { color: var(--muted); font-size: 0.85em; }
+.more { font-size: 0.9em; }
+@media (max-width: 560px) {
+  .compact li { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .compact .code { display: none; }
+}
+
 a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 

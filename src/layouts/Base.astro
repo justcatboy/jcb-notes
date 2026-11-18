@@ -21,7 +21,7 @@ const { title, description, section, md } = Astro.props;
 const fullTitle = title ? `${title} — ${SITE_TITLE}` : SITE_TITLE;
 const versionHref = siteTag && `${REPO}/tree/${siteTag}`;
 const nav = [
-  { id: 'blog', label: 'блог', href: page('') },
+  { id: 'blog', label: 'блог', href: page('blog/') },
   { id: 'standards', label: 'стандарты', href: page('standards/') },
   { id: 'stack', label: 'стек', href: page('stack/') },
 ];
@@ -52,7 +52,7 @@ const nav = [
   <body>
     <div class="col">
       <header class="s-head">
-        <a class="s-logo" href={page('')}>{SITE_TITLE.toLowerCase()}</a>
+        <a class="s-logo" href={page('')}>{SITE_TITLE}</a>
         <nav class="s-nav" aria-label="Разделы">
           {nav.map((item) => <a href={item.href} aria-current={item.id === section ? 'page' : undefined}>{item.label}</a>)}
           <button class="theme" type="button" id="theme-toggle" aria-label="Сменить тему">◐</button>
