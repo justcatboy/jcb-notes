@@ -26,6 +26,9 @@ gpg --export-secret-keys --armor <id> > backup-key.asc   # → в менедже
 `git-remote-gcrypt` — один shell-скрипт: положить в `PATH` (на Windows — рядом с `git.exe` Git Bash) или поставить
 пакетом в Linux. На Windows работу через Git Bash ещё нужно проверить.
 
+Ключ GPG и сам `git-remote-gcrypt` — единственное, что живёт в системе, а не в проекте: шифрование идёт через
+связку ключей пользователя.
+
 ## Новый проект
 
 ```sh
@@ -44,37 +47,45 @@ git add -A && git commit -m "backup" && git push -u origin main
 
 ## Регулярный бэкап
 
-Скрипт обходит проекты и отправляет каждый `private/`, где есть изменения:
+`scripts/backup-private.sh` в репозитории проекта — отправляет `private/`, если там есть изменения:
 
 ```sh
 #!/bin/sh
-# backup-private.sh <папка с проектами>
-find "$1" -maxdepth 3 -type d -path '*/private/.git' | while read -r git; do
-  dir=$(dirname "$git")
-  cd "$dir" || continue
-  if [ -n "$(git status --porcelain)" ]; then
-    git add -A && git commit -q -m "backup $(date +%F)"
-  fi
-  git push -q origin HEAD || echo "НЕ ОТПРАВЛЕН: $dir" >&2
-  cd - >/dev/null
-done
+cd "$(git rev-parse --show-toplevel)/private" || exit 0
+if [ -n "$(git status --porcelain)" ]; then
+  git add -A && git commit -q -m "backup $(date +%F)"
+fi
+git push -q origin HEAD || echo "private/ НЕ ОТПРАВЛЕН" >&2
 ```
 
-На Windows — Планировщик заданий, раз в день при входе в систему:
+`.githooks/pre-push` проекта (хуки включены настройкой репозитория `core.hooksPath=.githooks`):
 
-```powershell
-schtasks /create /tn "backup-private" /sc daily /st 21:00 `
-  /tr "\"C:\Program Files\Git\bin\bash.exe\" -lc '~/bin/backup-private.sh ~/projects'"
+```sh
+#!/bin/sh
+sh "$(git rev-parse --show-toplevel)/scripts/backup-private.sh"
+exit 0
 ```
+
+Сбой бэкапа push проекта не останавливает: хук только предупреждает. Если проект неделю не отправлялся —
+запустить скрипт вручную: `sh scripts/backup-private.sh`, у Node — `npm run backup` (скрипт
+`"backup": "sh scripts/backup-private.sh"` в `package.json`).
 
 Сообщения в `private/` — «backup <дата>», а не по смыслу: это бэкап, а не история работы.
+
+## Журнал проверок
+
+`private/BACKUP.md` — по строке на проверку восстановления:
+
+```text
+2026-11-18 — восстановлено на втором ноутбуке, diff пустой
+```
 
 ## Проверка восстановления
 
 ```sh
 mkdir /tmp/restore && cd /tmp/restore
 git clone gcrypt::git@github.com:<логин>/<проект>-private.git
-diff -r <проект>-private ~/projects/<проект>/private --exclude=.git
+diff -r <проект>-private <путь к проекту>/private --exclude=.git
 ```
 
 На второй машине — сначала `gpg --import backup-key.asc` из менеджера паролей: заодно проверяется, что ключ там
