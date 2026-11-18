@@ -14,7 +14,8 @@
 | **Стандарты** `jcb-*` — правила, по которым проект соответствует или нет | `src/content/standards/<имя>/index.md` |
 | **Приложения** к стандарту — необязательные дополнения: примеры, пояснения, инструменты | `src/content/standards/<имя>/appendix-<N>.md` |
 | **Страницы** вне блога — сейчас «Мой стек» (`/stack/`) | `src/content/pages/<имя>.md` |
-| **Рекламные места** в правой колонке главной | `src/ads.ts` |
+| **Рекламные места** в правой колонке главной — список, сверху вниз | `src/ads.ts` |
+| Баннеры: адаптивные SVG (встраиваются в страницу) и картинки | `src/side/<имя>.svg`, `public/side/<имя>.png` |
 | Оформление и каркас страниц | `src/styles/site.css`, `src/layouts/Base.astro` |
 
 ## Как писать
@@ -57,6 +58,17 @@ date: 2026-11-18
 ```md
 Стандарты: jcb-git-workflow v1.0, jcb-dotenv v1.1 — https://jcb-notes.pages.dev/standards/llms.txt
 ```
+
+**Рекламное место** — строка в `src/ads.ts`. Требования к баннерам для тех, кто их делает, — страница
+[«Размещение»](https://jcb-notes.pages.dev/placement/) (`src/content/pages/placement.md`).
+
+```ts
+{ title: 'Здесь могла быть ваша реклама', text: 'закажите прямо сейчас!' },           // текст в пунктирной рамке
+{ banner: 'side-standards', href: '/standards/' },                                   // адаптивный SVG из src/side/
+{ image: '/side/x.png', imageDark: '/side/x-dark.png', alt: 'Что на баннере', href: 'https://…' }, // картинка
+```
+
+В именах файлов и путях баннеров — без `ad`, `ads`, `banner`, `promo`: блокировщики рекламы их скрывают.
 
 **Общее:** без персональных данных и секретов, примеры — `example.com`, `*.test`. Репозиторий ведётся по
 jcb-git-workflow: работа — в `dev`, версии — слияниями в `main` с тегом.
