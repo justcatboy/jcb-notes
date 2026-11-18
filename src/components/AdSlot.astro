@@ -5,14 +5,28 @@ interface Props {
   ad: Ad;
 }
 
-const { title, text, href, label = 'реклама' } = Astro.props.ad;
+const { title, text, banner, image, imageDark, alt = '', href, label = 'реклама' } = Astro.props.ad;
 const Title = href ? 'a' : 'p';
+const Art = href ? 'a' : 'div';
+
+const svgs = import.meta.glob<string>('../side/*.svg', { query: '?raw', import: 'default', eager: true });
+const svg = banner && svgs[`../side/${banner}.svg`];
+if (banner && !svg) throw new Error(`Нет баннера src/side/${banner}.svg (src/ads.ts)`);
 ---
 
 <div class="side-slot">
-  <div class="ad" role="note">
+  <div class:list={['ad', { 'with-art': svg || image }]} role="note">
     <span class="ad-label">{label}</span>
-    <Title class="ad-title" href={href}>{title}</Title>
+    {svg && <Art class="side-art" href={href} set:html={svg} />}
+    {
+      image && (
+        <Art class="side-art" href={href}>
+          <img class:list={{ 'art-light': imageDark }} src={image} alt={alt} loading="lazy" />
+          {imageDark && <img class="art-dark" src={imageDark} alt={alt} loading="lazy" />}
+        </Art>
+      )
+    }
+    {title && <Title class="ad-title" href={href}>{title}</Title>}
     {text && <span class="ad-note">{text}</span>}
   </div>
   <div class="blocked-box" role="note" hidden>
@@ -87,6 +101,43 @@ const Title = href ? 'a' : 'p';
   }
   .blocked-box {
     padding: 16px 14px 14px;
+  }
+  .ad.with-art {
+    border: 0;
+    padding: 0;
+    text-align: left;
+  }
+  .ad.with-art .ad-label {
+    position: static;
+    display: block;
+    padding: 0;
+    margin-bottom: 6px;
+  }
+  .side-art {
+    display: block;
+  }
+  .side-art :global(svg),
+  .side-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .art-dark {
+    display: none !important;
+  }
+  :global(:root[data-theme='dark']) .art-dark {
+    display: block !important;
+  }
+  :global(:root[data-theme='dark']) .art-light {
+    display: none !important;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .art-dark {
+      display: block !important;
+    }
+    :global(:root:not([data-theme='light'])) .art-light {
+      display: none !important;
+    }
   }
   .blocked-box-icon {
     display: block;
