@@ -34,6 +34,8 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
+    version: z.string().regex(/^v\d+\.\d+$/, 'версия — v<старший>.<младший>').optional(),
+    date: z.coerce.date().optional(),
   }),
 });
 
