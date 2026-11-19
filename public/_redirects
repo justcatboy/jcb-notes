@@ -8,4 +8,7 @@
 /standards.json       /practices/index.json            301
 /llms-full.txt        /practices/llms-full.txt         301
 /standards            /practices/                      301
+/practices/deploy     /practices/                      301
+/practices/deploy.md  /practices/                      301
+/practices/deploy/*   /practices/                      301
 /standards/*          /practices/:splat                301
