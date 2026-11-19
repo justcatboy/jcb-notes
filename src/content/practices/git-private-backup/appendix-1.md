@@ -47,9 +47,9 @@ git add -A && git commit -m "backup" && git push -u origin main
 
 ## Регулярный бэкап
 
-`scripts/backup-private.sh` в репозитории проекта — отправляет `private/`, если там есть изменения:
+Скрипт в репозитории проекта отправляет `private/`, если там есть изменения:
 
-```sh
+```sh title="scripts/backup-private.sh"
 #!/bin/sh
 cd "$(git rev-parse --show-toplevel)/private" || exit 0
 if [ -n "$(git status --porcelain)" ]; then
@@ -58,9 +58,9 @@ fi
 git push -q origin HEAD || echo "private/ НЕ ОТПРАВЛЕН" >&2
 ```
 
-`.githooks/pre-push` проекта (хуки включены настройкой репозитория `core.hooksPath=.githooks`):
+Хук проекта запускает его при каждом push (хуки включены настройкой репозитория `core.hooksPath=.githooks`):
 
-```sh
+```sh title=".githooks/pre-push"
 #!/bin/sh
 sh "$(git rev-parse --show-toplevel)/scripts/backup-private.sh"
 exit 0
@@ -74,9 +74,9 @@ exit 0
 
 ## Журнал проверок
 
-`private/BACKUP.md` — по строке на проверку восстановления:
+По строке на проверку восстановления:
 
-```text
+```text title="private/BACKUP.md"
 2026-11-18 — восстановлено на втором ноутбуке, diff пустой
 ```
 

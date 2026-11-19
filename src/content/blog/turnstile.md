@@ -24,7 +24,7 @@ Cloudflare → **Turnstile** → Add widget:
 Браузер получает от виджета токен и отправляет его с формой (в теле или заголовке). Сервер проверяет токен у
 Cloudflare:
 
-```
+```http
 POST https://challenges.cloudflare.com/turnstile/v0/siteverify
 secret=<Secret Key>&response=<токен>&remoteip=<адрес посетителя>
 ```
