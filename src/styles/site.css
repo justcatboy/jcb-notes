@@ -258,7 +258,6 @@ th { color: var(--muted); font-weight: 700; }
 .practice-table td.code, .practice-table td.v { white-space: nowrap; }
 .practice-table td.v { font-variant-numeric: tabular-nums; }
 .practice-table td.apps a + a { margin-left: 10px; }
-.practice-table tr.group-start td { border-top: 3px double var(--line); }
 
 /* подвал */
 .s-foot {

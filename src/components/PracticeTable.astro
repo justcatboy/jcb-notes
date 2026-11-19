@@ -16,9 +16,9 @@ const appendices = new Map(
   <thead><tr><th>Код</th><th>Документ</th><th>Версия</th><th>Приложение</th></tr></thead>
   <tbody>
     {
-      groups.map((group, g) =>
-        group.map((entry, i) => (
-          <tr class={g > 0 && i === 0 ? 'group-start' : undefined}>
+      groups.map((group) =>
+        group.map((entry) => (
+          <tr>
             <td class="code">{entry.data.code}</td>
             <td><a href={page(`practices/${entry.id}/`)}>{entry.data.title}</a></td>
             <td class="v">{entry.data.version}</td>
