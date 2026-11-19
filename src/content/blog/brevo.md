@@ -2,7 +2,7 @@
 title: 'Почта через Brevo (SMTP)'
 description: 'Почта по SMTP: домен (DKIM, DMARC), отправитель, SMTP-ключ.'
 date: 2026-11-16
-tags: [гайд, почта]
+tags: [guide, email]
 ---
 
 Письма приложения (коды, сброс пароля) через SMTP-релей Brevo от адреса своего домена, например `noreply@example.com`.

@@ -10,7 +10,7 @@ import { siteTag, siteVersion } from '../version';
 interface Props {
   title?: string;
   description?: string;
-  section?: 'blog' | 'practices' | 'stack';
+  section?: 'blog' | 'practices';
   md?: string;
 }
 
@@ -22,9 +22,7 @@ const year = new Date().getFullYear();
 const copyrightYears = year > FIRST_YEAR ? `${FIRST_YEAR}–${year}` : `${FIRST_YEAR}`;
 const nav = [
   { id: 'blog', label: 'блог', href: page('blog/') },
-  { id: 'practices', label: 'практики', href: page('practices/') },
-  { id: 'stack', label: 'стек', href: page('stack/') },
-];
+  { id: 'practices', label: 'практики', href: page('practices/') },];
 ---
 
 <!doctype html>

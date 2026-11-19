@@ -29,7 +29,7 @@ export const isDraft = (version: string) => version.startsWith('v0.');
 // новая практика — имя папки сюда
 export const practiceGroups = [
   ['git-workflow', 'git-public-ready', 'git-private-backup'],
-  ['dotenv', 'devports', 'external-services', 'testing', 'deploy'],
+  ['dotenv', 'devports', 'external-services', 'testing'],
 ];
 
 export type Practice = CollectionEntry<'practices'> & { data: { code: string; version: string } };

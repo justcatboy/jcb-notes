@@ -26,7 +26,7 @@ export const GET: APIRoute = async () => {
   );
   const body = {
     site: absolute(''),
-    description: 'Практики jcb-*. Проект фиксирует принятые практики с версией: «jcb-dotenv v2.0». draft: true — v0.x, ещё в разработке.',
+    description: 'Практики jcb-*. Проект фиксирует принятые практики с версией: «jcb-dotenv v2.1». draft: true — v0.x, ещё в разработке.',
     practices,
   };
   return new Response(JSON.stringify(body, null, 2) + '\n', {

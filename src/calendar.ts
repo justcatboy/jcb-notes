@@ -2,6 +2,7 @@
 export interface CalendarPost {
   title: string;
   url: string;
+  kind: 'post' | 'practice';
 }
 
 export const dayKey = (y: number, m: number, d: number) =>
@@ -26,13 +27,20 @@ export function renderMonth(y: number, m: number, today: string, posts: Record<s
   for (let d = 1; d <= days; d++) {
     const key = dayKey(y, m, d);
     const cls = key === today ? ' class="cal-today"' : '';
-    const count = posts[key]?.length ?? 0;
-    if (count) {
+    const entries = posts[key] ?? [];
+    if (entries.length) {
       // у краёв подсказка прижата к краю
       const col = (offset + d - 1) % 7;
       const edge = col < 2 ? ' cal-l' : col > 4 ? ' cal-r' : '';
       const today = cls ? ' cal-today' : '';
-      const text = `${count} ${plural(count, 'запись', 'записи', 'записей')}`;
+      const nPosts = entries.filter((e) => e.kind === 'post').length;
+      const nPractices = new Set(entries.filter((e) => e.kind === 'practice').map((e) => e.url)).size;
+      const text = [
+        nPosts && `${nPosts} ${plural(nPosts, 'запись', 'записи', 'записей')}`,
+        nPractices && `${nPractices} ${plural(nPractices, 'практика', 'практики', 'практик')}`,
+      ]
+        .filter(Boolean)
+        .join(', ');
       cells.push(`<span class="cal-post${today}${edge}" tabindex="0" data-tip="${text}" aria-label="${d}: ${text}">${d}</span>`);
     } else {
       cells.push(`<span${cls}>${d}</span>`);
