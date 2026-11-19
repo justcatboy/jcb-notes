@@ -23,6 +23,7 @@ title: 'jcb-dotenv: приложение 1'
 - Приоритет при разработке «оболочка > `.env.local` > `.env.development`»: грузить сначала `.env.local`, потом
   `.env.development`, не перезаписывая то, что уже задано.
 - В автопроверках файл главнее оболочки: прочитать файл `util.parseEnv` и записать значения поверх `process.env`.
+- Vitest, Jest и Vite в режиме проверок сами ищут `.env.test` — `.env.autotest` грузить явно, тем же модулем.
 
 ## Описание переменных: `docs/env.md`
 
@@ -49,7 +50,7 @@ title: 'jcb-dotenv: приложение 1'
 | `log` | в лог сервера |
 | `smtp` | отправка по SMTP |
 
-| development | test | сайт |
+| development | autotest | сайт |
 |---|---|---|
 | log | log | smtp |
 ```

@@ -36,10 +36,10 @@ tags: [гайд, почта]
 (без этого сборка падает). Шапка — полями во frontmatter: сайт показывает её под заголовком и добавляет в `.md`.
 
 ```yaml
-title: 'Настройки только в .env-файлах'
+title: 'Настройки в .env-файлах'
 code: jcb-dotenv
-version: v1.1
-date: 2026-11-18
+version: v2.0
+date: 2026-11-19
 ```
 
 - Практика самодостаточна: ссылок на другие документы в нём нет, каждый можно взять отдельно.
@@ -56,7 +56,7 @@ date: 2026-11-18
 Проект перечисляет принятые практики с версиями в своём `CLAUDE.md` или README:
 
 ```md
-Практики: jcb-git-workflow v1.0, jcb-dotenv v1.1 — https://jcb-notes.pages.dev/practices/llms.txt
+Практики: jcb-git-workflow v1.0, jcb-dotenv v2.0 — https://jcb-notes.pages.dev/practices/llms.txt
 ```
 
 **Рекламное место** — строка в `src/ads.ts`. Требования к баннерам для тех, кто их делает, — страница
