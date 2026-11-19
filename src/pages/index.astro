@@ -5,23 +5,25 @@ import { ads } from '../ads';
 import { day } from '../header';
 import Base from '../layouts/Base.astro';
 import { page } from '../markdown';
-import { getPosts, getStandards } from '../site';
+import { getPosts, getPractices, isDraft } from '../site';
 
 const posts = (await getPosts()).slice(0, 3);
-const standards = (await getStandards())
-  .flat()
+const practices = (await getPractices()).flat();
+const accepted = practices
+  .filter((entry) => !isDraft(entry.data.version))
   .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
   .slice(0, 5);
+const drafts = practices.filter((entry) => isDraft(entry.data.version)).length;
 ---
 
-<Base description="Личный блог о разном и стандарты jcb-* для моих проектов.">
+<Base description="Личный блог о разном и практики jcb-* для моих проектов.">
   <div class="split">
     <div class="split-main">
       <div class="lead">
         <h1>Личный блог</h1>
         <p>Пишу о разном: о своих проектах и разработке, об инструментах и обо всём, что интересно.</p>
         <p>
-          Отдельная часть сайта — стандарты <code>jcb-*</code>: правила, которые выросли из моих проектов. Проект принимает
+          Отдельная часть сайта — практики <code>jcb-*</code>: правила, которые выросли из моих проектов. Проект принимает
           их с версией и проверяет себя по ним.
         </p>
       </div>
@@ -42,19 +44,27 @@ const standards = (await getStandards())
       </section>
 
       <section class="home-section">
-        <h2 class="home-title">Стандарты</h2>
+        <h2 class="home-title">Практики</h2>
         <ul class="compact">
           {
-            standards.map((entry) => (
+            accepted.map((entry) => (
               <li>
-                <span class:list={['v', { draft: entry.data.version.startsWith('v0.') }]}>{entry.data.version}</span>
-                <a href={page(`standards/${entry.id}/`)}>{entry.data.title}</a>
+                <span class="v">{entry.data.version}</span>
+                <a href={page(`practices/${entry.id}/`)}>{entry.data.title}</a>
                 <span class="code">{entry.data.code}</span>
               </li>
             ))
           }
+          {
+            drafts > 0 && (
+              <li>
+                <span class="v">v0.x</span>
+                <a class="muted" href={page('practices/#drafts')}>ещё {drafts} в разработке</a>
+              </li>
+            )
+          }
         </ul>
-        <a class="more" href={page('standards/')}>все стандарты и как ими пользоваться →</a>
+        <a class="more" href={page('practices/')}>все практики и как ими пользоваться →</a>
       </section>
     </div>
     <aside class="side">

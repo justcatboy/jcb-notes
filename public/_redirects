@@ -1,9 +1,11 @@
-# Cloudflare Pages: старые адреса (до блога) → новые.
+# Cloudflare Pages: старые адреса → новые.
 /guides/:name/        /blog/:name/                     301
 /guides/:name.md      /blog/:name.md                   301
 /notes/stack/         /stack/                          301
 /notes/stack.md       /stack.md                        301
 /notes/:name/         /blog/:name/                     301
 /notes/:name.md       /blog/:name.md                   301
-/standards.json       /standards/index.json            301
-/llms-full.txt        /standards/llms-full.txt         301
+/standards.json       /practices/index.json            301
+/llms-full.txt        /practices/llms-full.txt         301
+/standards            /practices/                      301
+/standards/*          /practices/:splat                301

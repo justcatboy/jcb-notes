@@ -8,7 +8,7 @@ interface Props {
 const { code, parts } = Astro.props;
 ---
 
-<nav class="toc-parts" aria-label="Стандарт и приложения">
+<nav class="toc-parts" aria-label="Практика и приложения">
   <b>{code}</b>
   <ul>
     {parts.map((p) => <li>{p.current ? <span aria-current="page">{p.label}</span> : <a href={p.href}>{p.label}</a>}</li>)}
