@@ -2,7 +2,7 @@
 title: 'Eleventy и Astro: почему Astro'
 description: 'Почему этот сайт на Astro: кто стоит за каждым, как часто меняются, перспективы.'
 date: 2026-11-16
-tags: [сайт, astro]
+tags: [website, astro]
 ---
 
 ## Задача
