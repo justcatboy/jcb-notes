@@ -1,0 +1,80 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import PracticeParts from '../../components/PracticeParts.astro';
+import Toc from '../../components/Toc.astro';
+import { day } from '../../header';
+import Base from '../../layouts/Base.astro';
+import { page } from '../../markdown';
+import { appendixNumber, downloadName, getAppendices, isDraft } from '../../site';
+import { tocItems } from '../../toc';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('practices');
+  return all.map((entry) => {
+    const name = entry.id.split('/')[0];
+    return { params: { id: entry.id }, props: { entry, practice: all.find((e) => e.id === name)! } };
+  });
+}) satisfies GetStaticPaths;
+
+const { entry, practice } = Astro.props as { entry: CollectionEntry<'practices'>; practice: CollectionEntry<'practices'> };
+const { Content, headings } = await render(entry);
+const { code, version, date } = entry.data;
+const name = practice.id;
+const number = appendixNumber(entry.id);
+const isAppendix = number !== undefined;
+const label = (id: string) => (appendixNumber(id) ? `Приложение ${appendixNumber(id)}` : 'Практика');
+const parts = [practice, ...(await getAppendices(name))];
+const index = parts.findIndex((p) => p.id === entry.id);
+const prev = parts[index - 1];
+const next = parts[index + 1];
+const md = `practices/${entry.id}.md`;
+const hasToc = tocItems(headings).length > 0;
+const hasParts = parts.length > 1;
+const partLinks = parts.map((p) => ({ label: label(p.id), href: page(`practices/${p.id}/`), current: p.id === entry.id }));
+---
+
+<Base title={isAppendix ? `${practice.data.code}: приложение ${number}` : entry.data.title} section="practices" md={md}>
+  <article class="doc">
+    <header class="doc-head">
+      <div class="crumbs">
+        <a href={page('practices/')}>практики</a> /{' '}
+        {isAppendix ? <><a href={page(`practices/${name}/`)}>{practice.data.code}</a> / приложение {number}</> : code}
+      </div>
+      <h1>{isAppendix ? `Приложение ${number}` : entry.data.title}</h1>
+      <div class="meta">
+        {
+          code && version ? (
+            <span>
+              Практика {code} -{' '}
+              <a href={page(`practices/${name}/${version}.md`)} title="Неизменяемый текст этой версии — для ссылки из проекта">{version}</a>
+              {date && ` - ${day(date)}`}
+              {isDraft(version) && ' - в разработке'}
+            </span>
+          ) : (
+            <span>к практике <a href={page(`practices/${name}/`)}>{practice.data.title}</a></span>
+          )
+        }
+        <a class="dl" href={page(md)} download={downloadName('practices', entry.id)}>Скачать .md</a>
+      </div>
+    </header>
+    {
+      hasToc ? (
+        <Toc headings={headings}>
+          {hasParts && <PracticeParts slot="parts" code={practice.data.code!} parts={partLinks} />}
+        </Toc>
+      ) : (
+        hasParts && (
+          <div class="toc">
+            <PracticeParts code={practice.data.code!} parts={partLinks} />
+          </div>
+        )
+      )
+    }
+    <div class="prose doc-body"><Content /></div>
+    <nav class="pager doc-foot" aria-label="Практика и приложения">
+      {prev && <a href={page(`practices/${prev.id}/`)}>← {appendixNumber(prev.id) ? label(prev.id) : practice.data.code}</a>}
+      {next && <a href={page(`practices/${next.id}/`)} style="margin-left:auto">{label(next.id)}: дополнение к практике →</a>}
+    </nav>
+  </article>
+</Base>

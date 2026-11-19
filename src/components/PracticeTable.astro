@@ -1,0 +1,35 @@
+---
+import { page } from '../markdown';
+import { appendixNumber, getAppendices, type Practice } from '../site';
+
+interface Props {
+  groups: Practice[][];
+}
+
+const { groups } = Astro.props;
+const appendices = new Map(
+  await Promise.all(groups.flat().map(async (entry) => [entry.id, await getAppendices(entry.id)] as const)),
+);
+---
+
+<table class="practice-table">
+  <thead><tr><th>Код</th><th>Документ</th><th>Версия</th><th>Приложение</th></tr></thead>
+  <tbody>
+    {
+      groups.map((group, g) =>
+        group.map((entry, i) => (
+          <tr class={g > 0 && i === 0 ? 'group-start' : undefined}>
+            <td class="code">{entry.data.code}</td>
+            <td><a href={page(`practices/${entry.id}/`)}>{entry.data.title}</a></td>
+            <td class="v">{entry.data.version}</td>
+            <td class="apps">
+              {appendices.get(entry.id)!.map((a) => (
+                <a href={page(`practices/${a.id}/`)} title={`${entry.data.code}: приложение ${appendixNumber(a.id)}`}>{appendixNumber(a.id)}</a>
+              ))}
+            </td>
+          </tr>
+        )),
+      )
+    }
+  </tbody>
+</table>

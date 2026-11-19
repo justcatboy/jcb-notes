@@ -1,9 +1,9 @@
 import { execFileSync } from 'node:child_process';
 import { toMarkdown } from './markdown';
-import { getStandards } from './site';
+import { getPractices } from './site';
 import './version'; // докачивает историю на Cloudflare
 
-export interface StandardVersion {
+export interface PracticeVersion {
   name: string;
   code: string;
   version: string;
@@ -17,14 +17,14 @@ const git = (...args: string[]) =>
 const field = (frontmatter: string, name: string) =>
   frontmatter.match(new RegExp(`^${name}:\\s*['"]?(.+?)['"]?\\s*$`, 'm'))?.[1];
 
-function fromHistory(file: string): Omit<StandardVersion, 'name'>[] {
+function fromHistory(file: string): Omit<PracticeVersion, 'name'>[] {
   let log: string;
   try {
     log = git('log', '--follow', '--format=%x00%H', '--name-only', '--', file);
   } catch {
     return [];
   }
-  const found = new Map<string, Omit<StandardVersion, 'name'>>();
+  const found = new Map<string, Omit<PracticeVersion, 'name'>>();
   for (const chunk of log.split('\0').filter(Boolean)) {
     const [hash, ...paths] = chunk.split('\n').map((line) => line.trim()).filter(Boolean);
     const path = paths.at(-1);
@@ -45,14 +45,14 @@ function fromHistory(file: string): Omit<StandardVersion, 'name'>[] {
   return [...found.values()];
 }
 
-let cache: Promise<StandardVersion[]> | undefined;
+let cache: Promise<PracticeVersion[]> | undefined;
 
-export function standardVersions(): Promise<StandardVersion[]> {
+export function practiceVersions(): Promise<PracticeVersion[]> {
   cache ??= (async () => {
-    const standards = (await getStandards()).flat();
-    return standards.flatMap((entry) => {
+    const practices = (await getPractices()).flat();
+    return practices.flatMap((entry) => {
       const name = entry.id;
-      const current: StandardVersion = {
+      const current: PracticeVersion = {
         name,
         code: entry.data.code,
         version: entry.data.version,

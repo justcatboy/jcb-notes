@@ -14,5 +14,5 @@ export interface Ad {
 // места в правой колонке главной, сверху вниз; требования к баннерам — /placement/
 export const ads: Ad[] = [
   { title: 'Здесь могла быть ваша реклама', text: 'закажите прямо сейчас!' },
-  { banner: 'side-standards', href: '/standards/' },
+  { banner: 'side-practices', href: '/practices/' },
 ];

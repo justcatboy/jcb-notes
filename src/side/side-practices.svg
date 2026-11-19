@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120" role="img">
-  <title>Стандарты jcb-* для ваших проектов</title>
+  <title>Практики jcb-* для ваших проектов</title>
   <path d="M22 18 H12 V102 H22 M218 18 H228 V102 H218" style="fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 2.5; stroke-linecap: round" />
   <text x="120" y="54" text-anchor="middle" style="font: 700 24px 'JetBrains Mono', ui-monospace, monospace; fill: var(--fg)">jcb-*</text>
-  <text x="120" y="78" text-anchor="middle" style="font: 400 14px 'JetBrains Mono', ui-monospace, monospace; fill: var(--muted)">стандарты для</text>
+  <text x="120" y="78" text-anchor="middle" style="font: 400 14px 'JetBrains Mono', ui-monospace, monospace; fill: var(--muted)">практики для</text>
   <text x="120" y="96" text-anchor="middle" style="font: 700 14px 'JetBrains Mono', ui-monospace, monospace; fill: var(--accent)">ваших проектов →</text>
 </svg>

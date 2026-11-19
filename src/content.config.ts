@@ -4,9 +4,9 @@ import { z } from 'astro/zod';
 
 
 // dotenv/index.md → dotenv, dotenv/appendix-1.md → dotenv/appendix-1
-const standards = defineCollection({
+const practices = defineCollection({
   loader: glob({
-    base: './src/content/standards',
+    base: './src/content/practices',
     pattern: '**/*.md',
     generateId: ({ entry }) => entry.replace(/\.md$/, '').replace(/\/index$/, ''),
   }),
@@ -39,4 +39,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { standards, blog, pages };
+export const collections = { practices, blog, pages };
