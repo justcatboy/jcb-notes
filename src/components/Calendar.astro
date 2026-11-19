@@ -3,10 +3,15 @@ import { dayKey, renderMonth, type CalendarPost } from '../calendar';
 import { day } from '../header';
 import { page } from '../markdown';
 import { getPosts } from '../site';
+import { practiceVersions } from '../versions';
 
 const posts: Record<string, CalendarPost[]> = {};
 for (const post of await getPosts()) {
-  (posts[day(post.data.date)] ??= []).push({ title: post.data.title, url: page(`blog/${post.id}/`) });
+  (posts[day(post.data.date)] ??= []).push({ title: post.data.title, url: page(`blog/${post.id}/`), kind: 'post' });
+}
+for (const v of await practiceVersions()) {
+  if (!v.date) continue;
+  (posts[day(v.date)] ??= []).push({ title: `${v.code} ${v.version}`, url: page(`practices/${v.name}/`), kind: 'practice' });
 }
 const now = new Date();
 const html = renderMonth(now.getFullYear(), now.getMonth(), dayKey(now.getFullYear(), now.getMonth(), now.getDate()), posts);
