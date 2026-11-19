@@ -13,11 +13,10 @@ export const getStaticPaths = (async () =>
 const { entry } = Astro.props as { entry: CollectionEntry<'pages'> };
 const { Content, headings } = await render(entry);
 const md = `${entry.id}.md`;
-const section = entry.id === 'stack' ? 'stack' : undefined;
 const header = headerLine(entry.data);
 ---
 
-<Base title={entry.data.title} description={entry.data.description} section={section} md={md}>
+<Base title={entry.data.title} description={entry.data.description} md={md}>
   <article class="doc">
     <header class="doc-head">
       <h1>{entry.data.title}</h1>

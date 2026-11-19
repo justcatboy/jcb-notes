@@ -1,8 +1,10 @@
 # Cloudflare Pages: старые адреса → новые.
 /guides/:name/        /blog/:name/                     301
 /guides/:name.md      /blog/:name.md                   301
-/notes/stack/         /stack/                          301
-/notes/stack.md       /stack.md                        301
+/notes/stack/         /                                301
+/notes/stack.md       /                                301
+/stack/               /                                301
+/stack.md             /                                301
 /notes/:name/         /blog/:name/                     301
 /notes/:name.md       /blog/:name.md                   301
 /standards.json       /practices/index.json            301
