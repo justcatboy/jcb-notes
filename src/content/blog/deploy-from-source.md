@@ -36,7 +36,7 @@ cat ~/.ssh/app_deploy.pub
 
 Своё имя хоста в `~/.ssh/config` указывает SSH, каким ключом ходить к этому репозиторию:
 
-```
+```ssh-config title="~/.ssh/config"
 Host github-app
   HostName github.com
   User git
@@ -58,17 +58,14 @@ GitHub и ответить `yes`. Дальше git ходит в репозит�
 ## 4. Настройки и Compose
 
 Настройки сервера лежат рядом с клоном, вне репозитория: обновление их сохраняет, а в git они не попадают.
+`compose.yaml` лежит в репозитории и берёт настройки из этого файла.
 
-`/srv/app.env`:
-
-```sh
+```dotenv title="/srv/app.env"
 APP_URL=https://app.example.com
 DATABASE_URL=postgres://app:<пароль>@db:5432/app
 ```
 
-`compose.yaml` в репозитории:
-
-```yaml
+```yaml title="compose.yaml"
 services:
   app:
     build: .
@@ -103,7 +100,7 @@ docker compose up -d --build
 docker compose ps
 ```
 
-```
+```text title="вывод"
 NAME        IMAGE     SERVICE   STATUS                    PORTS
 app-app-1   app-app   app       Up 2 minutes (healthy)    127.0.0.1:3000->3000/tcp
 ```

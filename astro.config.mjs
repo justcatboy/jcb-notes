@@ -1,10 +1,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import expressiveCode from 'astro-expressive-code';
 
 export default defineConfig({
   site: 'https://jcb-notes.pages.dev',
-  integrations: [sitemap()],
-  markdown: {
-    shikiConfig: { themes: { light: 'min-light', dark: 'min-dark' } },
-  },
+  integrations: [expressiveCode(), sitemap()],
 });

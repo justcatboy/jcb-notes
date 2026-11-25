@@ -149,11 +149,8 @@ pre {
   overflow-x: auto;
 }
 pre code { font-weight: 400; font-size: 1em; }
-.astro-code { background: none !important; }
-:root[data-theme='dark'] .astro-code, :root[data-theme='dark'] .astro-code span { color: var(--shiki-dark) !important; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .astro-code, :root:not([data-theme='light']) .astro-code span { color: var(--shiki-dark) !important; }
-}
+.expressive-code { margin: 0 0 1.2em; }
+.expressive-code pre { margin: 0; border-left: 0; padding: 0; font-size: 1em; }
 
 .prose ul { margin: 0 0 1em; padding-left: 0; list-style: none; }
 .prose ul ul { margin: 0.2em 0 0; }
@@ -261,7 +258,6 @@ th { color: var(--muted); font-weight: 700; }
 .practice-table td.code, .practice-table td.v { white-space: nowrap; }
 .practice-table td.v { font-variant-numeric: tabular-nums; }
 .practice-table td.apps a + a { margin-left: 10px; }
-.practice-table tr.group-start td { border-top: 3px double var(--line); }
 
 /* подвал */
 .s-foot {

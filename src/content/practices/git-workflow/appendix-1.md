@@ -6,18 +6,14 @@ title: 'jcb-git-workflow: приложение 1'
 
 ## Следующий номер версии
 
-PowerShell:
-
-```powershell
+```powershell title="PowerShell"
 $y = (Get-Date).Year
 $last = git tag --list "v$y.*" | Sort-Object | Select-Object -Last 1
 $n = if ($last) { [int]($last -replace "^v$y\.") + 1 } else { 1 }
 $v = "v$y.{0:D3}" -f $n
 ```
 
-sh:
-
-```sh
+```sh title="sh"
 y=$(date +%Y)
 last=$(git tag --list "v$y.*" | sort | tail -n 1)
 n=$(( ${last:+10#${last#v$y.}} + 1 ))

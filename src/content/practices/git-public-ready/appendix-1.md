@@ -27,17 +27,17 @@ git config user.email <id>+<логин>@users.noreply.github.com   # или <л�
 git config core.hooksPath .githooks
 ```
 
-В `.gitignore` — эти три строки, в любом месте файла:
+Три строки — в любом месте файла:
 
-```text
+```text title=".gitignore"
 private/
 *.local
 *.local.*
 ```
 
-У Node-проекта хуки включаются сами при `npm install`, в `package.json`:
+У Node-проекта хуки включаются сами при `npm install`:
 
-```json
+```json title="package.json"
 "scripts": {
   "prepare": "git config core.hooksPath .githooks"
 }
@@ -45,9 +45,7 @@ private/
 
 ## Хуки
 
-`.githooks/pre-commit`:
-
-```sh
+```sh title=".githooks/pre-commit"
 #!/bin/sh
 case "$(git config user.email)" in
   *@users.noreply.github.com) ;;
@@ -65,9 +63,9 @@ gitleaks git --pre-commit --staged --redact --no-banner || exit 1
 Дополнительная проверка: строки, которые встречаться не должны — почта, телефон, имя, домашний путь, имя
 компьютера. Сканер секретов их не ловит.
 
-`private/denylist` — по строке на запись, сравнение без учёта регистра; в git он не попадает:
+По строке на запись, сравнение без учёта регистра; в git файл не попадает:
 
-```text
+```text title="private/denylist"
 моя-почта@example.com
 +7 700 000 00 00
 Имя Фамилия
@@ -77,9 +75,9 @@ C:\Users\<имя>
 
 Строки одни и те же во всех проектах: файл удобно копировать из соседнего проекта. Без него проверка пропускается.
 
-В конец `.githooks/pre-commit` — добавленные строки и имена файлов:
+В конец того же хука — проверка добавленных строк и имён файлов:
 
-```sh
+```sh title=".githooks/pre-commit"
 list="$(git rev-parse --show-toplevel)/private/denylist"
 if [ -s "$list" ]; then
   hits=$( { git diff --cached -U0 | grep '^+' ; git diff --cached --name-only ; } | grep -i -F -f "$list")
@@ -90,9 +88,9 @@ if [ -s "$list" ]; then
 fi
 ```
 
-`.githooks/commit-msg` — сообщение коммита:
+Сообщение коммита — отдельным хуком:
 
-```sh
+```sh title=".githooks/commit-msg"
 #!/bin/sh
 list="$(git rev-parse --show-toplevel)/private/denylist"
 if [ -s "$list" ] && grep -q -i -F -f "$list" "$1"; then
@@ -105,9 +103,9 @@ fi
 
 ## CI
 
-GitHub Actions, `.github/workflows/gitleaks.yml`:
+GitHub Actions:
 
-```yaml
+```yaml title=".github/workflows/gitleaks.yml"
 name: gitleaks
 on: [push, pull_request]
 jobs:
